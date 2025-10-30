@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="botones">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:backgroundTint">#0000ff</item>
+    </style>
+
+    <style name="MyMaterialButtonStyle">
+        <item name="backgroundTint">#FF00FF</item>
+        <item name="cornerRadius">0dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:drawableLeft">@drawable/ic_launcher_foreground</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">#00FFFF</item>
+    </style>
+
+    <style name="MyMaterialButtonStyleBis">
+        <item name="backgroundTint">#FF0000</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">#00FF22</item>
+    </style>
+</resources>

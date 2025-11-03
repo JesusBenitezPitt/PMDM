@@ -2,7 +2,9 @@ package com.example.miapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -100,6 +102,7 @@ public class Main extends AppCompatActivity {
             @Override
             public void onEntrada(Object entrada, View view) {
                 if (entrada != null){
+
                     TextView empresa = (TextView) view.findViewById(R.id.texto_titulo);
                     TextView tipo = (TextView) view.findViewById(R.id.texto_datos);
                     ImageView imagen_entrada = (ImageView) view.findViewById(R.id.imagen);
@@ -110,7 +113,13 @@ public class Main extends AppCompatActivity {
                     layoutClickable.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(Main.this, "Has seleccionado la empresa: " + empresa.getText().toString(), Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(Main.this, Informacion.class);
+                            intent.putExtra("nombre_empresa", empresa.getText().toString());
+                            intent.putExtra("tipo_auditoria", tipo.getText().toString());
+                            intent.putExtra("fecha", fecha.getText().toString());
+                            Bundle b = intent.getExtras();
+                            Log.d("Prueba", String.valueOf(b));
+                            startActivity(intent, b);
                         }
                     });
 
@@ -130,6 +139,5 @@ public class Main extends AppCompatActivity {
                 }
             }
         });
-
     }
 }

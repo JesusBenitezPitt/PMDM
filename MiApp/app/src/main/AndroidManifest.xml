@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MiApp">
         <activity
+            android:name=".Informacion"
+            android:exported="false" />
+        <activity
             android:name=".Main"
             android:exported="false" />
         <activity

@@ -25,8 +25,9 @@ import java.util.Date;
 public class Main extends AppCompatActivity {
 
     private ListView lista;
-    private TextView texto;
     private RadioButton radioButton_pulsado;
+    private ArrayList<Encapsulador> datos = new ArrayList<>();
+    private Adaptador adaptador;
 
     public static class Encapsulador {
         private int imagen;
@@ -90,7 +91,6 @@ public class Main extends AppCompatActivity {
 
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
-        ArrayList<Encapsulador> datos = new ArrayList<>();
         datos.add(new Encapsulador(R.drawable.software, "TechCorp", "Pentest", 4, parsearFecha(formato, "15/08/2025"), true));
         datos.add(new Encapsulador(R.drawable.industria, "IndusSecure", "Social Engineering", 3, parsearFecha(formato, "01/09/2025"), false));
         datos.add(new Encapsulador(R.drawable.finanzas, "FinBank", "Red / Infra", 5, parsearFecha(formato, "30/07/2025"), true));
@@ -98,28 +98,30 @@ public class Main extends AppCompatActivity {
         datos.add(new Encapsulador(R.drawable.educacion, "UniTech", "Cloud Security", 2, parsearFecha(formato, "20/09/2025"), true));
         datos.add(new Encapsulador(R.drawable.e_commerce, "ShopZone", "Pentest", 4, parsearFecha(formato, "10/10/2025"), false));
 
-        lista.setAdapter(new Adaptador(this, R.layout.entrada, datos) {
+        adaptador = new Adaptador(this, R.layout.entrada, datos) {
             @Override
             public void onEntrada(Object entrada, View view) {
                 if (entrada != null){
 
-                    TextView empresa = (TextView) view.findViewById(R.id.texto_titulo);
-                    TextView tipo = (TextView) view.findViewById(R.id.texto_datos);
+                    TextView empresa_texto = (TextView) view.findViewById(R.id.texto_titulo);
+                    TextView tipo_texto = (TextView) view.findViewById(R.id.texto_datos);
                     ImageView imagen_entrada = (ImageView) view.findViewById(R.id.imagen);
-                    TextView fecha = (TextView) view.findViewById(R.id.fecha);
+                    TextView fecha_texto = (TextView) view.findViewById(R.id.fecha);
                     CheckBox acabado = (CheckBox) view.findViewById(R.id.checkbox);
 
                     LinearLayout layoutClickable = (LinearLayout) view.findViewById(R.id.layoutClickable);
                     layoutClickable.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            final int REQUEST_CODE = 1;
                             Intent intent = new Intent(Main.this, Informacion.class);
-                            intent.putExtra("nombre_empresa", empresa.getText().toString());
-                            intent.putExtra("tipo_auditoria", tipo.getText().toString());
-                            intent.putExtra("fecha", fecha.getText().toString());
+                            int position = lista.getPositionForView(v);
+                            intent.putExtra("posicion", position);
+                            intent.putExtra("nombre_empresa", empresa_texto.getText().toString());
+                            intent.putExtra("tipo_auditoria", tipo_texto.getText().toString());
+                            intent.putExtra("fecha", fecha_texto.getText().toString());
                             Bundle b = intent.getExtras();
-                            Log.d("Prueba", String.valueOf(b));
-                            startActivity(intent, b);
+                            startActivityForResult(intent, REQUEST_CODE ,b);
                         }
                     });
 
@@ -127,10 +129,10 @@ public class Main extends AppCompatActivity {
                     Animation animacion_entrada = AnimationUtils.loadAnimation(Main.this, R.anim.anim_entrada);
                     layoutMain.setAnimation(animacion_entrada);
 
-                    empresa.setText(((Encapsulador) entrada).getEmpresa());
-                    tipo.setText(((Encapsulador) entrada).getTipo());
+                    empresa_texto.setText(((Encapsulador) entrada).getEmpresa());
+                    tipo_texto.setText(((Encapsulador) entrada).getTipo());
                     imagen_entrada.setImageResource(((Encapsulador) entrada).getImagenId());
-                    fecha.setText(formato.format(((Encapsulador) entrada).getFecha()));
+                    fecha_texto.setText(formato.format(((Encapsulador) entrada).getFecha()));
                     if (((Encapsulador) entrada).getAcabado()) {
                         acabado.setChecked(true);
                     } else {
@@ -138,6 +140,39 @@ public class Main extends AppCompatActivity {
                     }
                 }
             }
-        });
+
+        };
+        lista.setAdapter(adaptador);
+    }
+
+    @Override
+    public void onActivityResult(int request_code, int result_code, Intent i){
+        super.onActivityResult(request_code, result_code, i);
+        if (result_code == RESULT_OK && request_code == 1) {
+            Bundle b = i.getExtras();
+            Log.d("Prueba", "" + b);
+            if (b != null) {
+                int pos = b.getInt("posicion");
+                String nombre = b.getString("nombre_empresa");
+                String tipo = b.getString("tipo_auditoria");
+                String fecha = b.getString("fecha");
+
+                SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
+                Date fechaParseada;
+                try {
+                    fechaParseada = formater.parse(fecha);
+                } catch (ParseException e) {
+                    fechaParseada = new Date();
+                }
+
+                Encapsulador empresa = datos.get(pos);
+                datos.set(pos, new Encapsulador(empresa.getImagenId(), nombre, tipo, empresa.getRating(), fechaParseada, empresa.getAcabado()));
+
+                adaptador.notifyDataSetChanged();
+
+                Log.d("Prueba", "" + pos);
+                Log.d("Prueba", "Nombre: " + nombre + "\nTipo de auditoria: " + tipo + "\nFecha: " + fecha + ".");
+            }
+        }
     }
 }

@@ -12,16 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MiApp">
         <activity
-            android:name=".Register"
+            android:name=".Controller.Register"
             android:exported="false" />
         <activity
-            android:name=".Informacion"
+            android:name=".View.Informacion"
             android:exported="false" />
         <activity
             android:name=".Main"
             android:exported="false" />
         <activity
-            android:name=".Login"
+            android:name=".Controller.Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

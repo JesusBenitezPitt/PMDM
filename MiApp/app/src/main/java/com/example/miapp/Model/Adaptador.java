@@ -1,4 +1,4 @@
-package com.example.miapp;
+package com.example.miapp.Model;
 
 import android.content.Context;
 import android.view.LayoutInflater;

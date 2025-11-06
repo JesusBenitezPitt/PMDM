@@ -1,4 +1,4 @@
-package com.example.miapp;
+package com.example.miapp.Model;
 
 public class Usuario {
     private String name;

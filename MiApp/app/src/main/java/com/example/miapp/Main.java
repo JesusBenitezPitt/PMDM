@@ -5,16 +5,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.miapp.Model.Adaptador;
+import com.example.miapp.View.Informacion;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,13 +40,12 @@ public class Main extends AppCompatActivity {
         private Date fecha;
         private boolean acabado;
 
-        public Encapsulador(int idImagen, String empresa, String tipo, double rating, Date fecha, boolean acabado) {
+        public Encapsulador(int idImagen, String empresa, String tipo, double rating, Date fecha) {
             this.imagen = idImagen;
             this.empresa = empresa;
             this.texto = tipo;
             this.rating = rating;
             this.fecha = fecha;
-            this.acabado = acabado;
         }
 
         public int getImagenId() {
@@ -64,10 +66,6 @@ public class Main extends AppCompatActivity {
 
         public Date getFecha() {
             return fecha;
-        }
-
-        public boolean getAcabado() {
-            return acabado;
         }
     }
 
@@ -91,12 +89,12 @@ public class Main extends AppCompatActivity {
 
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
-        datos.add(new Encapsulador(R.drawable.software, "TechCorp", "Pentest", 4, parsearFecha(formato, "15/08/2025"), true));
-        datos.add(new Encapsulador(R.drawable.industria, "IndusSecure", "Social Engineering", 3, parsearFecha(formato, "01/09/2025"), false));
-        datos.add(new Encapsulador(R.drawable.finanzas, "FinBank", "Red / Infra", 5, parsearFecha(formato, "30/07/2025"), true));
-        datos.add(new Encapsulador(R.drawable.salud, "MediCare", "Compliance / GDPR", 3, parsearFecha(formato, "05/10/2025"), false));
-        datos.add(new Encapsulador(R.drawable.educacion, "UniTech", "Cloud Security", 2, parsearFecha(formato, "20/09/2025"), true));
-        datos.add(new Encapsulador(R.drawable.e_commerce, "ShopZone", "Pentest", 4, parsearFecha(formato, "10/10/2025"), false));
+        datos.add(new Encapsulador(R.drawable.software, "TechCorp", "Pentest", 4, parsearFecha(formato, "15/08/2025")));
+        datos.add(new Encapsulador(R.drawable.industria, "IndusSecure", "Social Engineering", 3, parsearFecha(formato, "01/09/2025")));
+        datos.add(new Encapsulador(R.drawable.finanzas, "FinBank", "Red / Infra", 5, parsearFecha(formato, "30/07/2025")));
+        datos.add(new Encapsulador(R.drawable.salud, "MediCare", "Compliance / GDPR", 3, parsearFecha(formato, "05/10/2025")));
+        datos.add(new Encapsulador(R.drawable.educacion, "UniTech", "Cloud Security", 2, parsearFecha(formato, "20/09/2025")));
+        datos.add(new Encapsulador(R.drawable.e_commerce, "ShopZone", "Pentest", 4, parsearFecha(formato, "10/10/2025")));
 
         adaptador = new Adaptador(this, R.layout.entrada, datos) {
             @Override
@@ -107,12 +105,14 @@ public class Main extends AppCompatActivity {
                     TextView tipo_texto = (TextView) view.findViewById(R.id.texto_datos);
                     ImageView imagen_entrada = (ImageView) view.findViewById(R.id.imagen);
                     TextView fecha_texto = (TextView) view.findViewById(R.id.fecha);
-                    CheckBox acabado = (CheckBox) view.findViewById(R.id.checkbox);
+                    RadioButton radioButton = (RadioButton) view.findViewById(R.id.radiobutton);
 
                     LinearLayout layoutClickable = (LinearLayout) view.findViewById(R.id.layoutClickable);
+                    registerForContextMenu(layoutClickable);
                     layoutClickable.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            radioButton.setChecked(true);
                             final int REQUEST_CODE = 1;
                             Intent intent = new Intent(Main.this, Informacion.class);
                             int position = lista.getPositionForView(v);
@@ -133,16 +133,22 @@ public class Main extends AppCompatActivity {
                     tipo_texto.setText(((Encapsulador) entrada).getTipo());
                     imagen_entrada.setImageResource(((Encapsulador) entrada).getImagenId());
                     fecha_texto.setText(formato.format(((Encapsulador) entrada).getFecha()));
-                    if (((Encapsulador) entrada).getAcabado()) {
-                        acabado.setChecked(true);
-                    } else {
-                        acabado.setChecked(false);
-                    }
                 }
             }
 
         };
         lista.setAdapter(adaptador);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.op_menu_principal, menu);
+        return true;
+    }
+
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.op_menu_contextual, menu);
     }
 
     @Override
@@ -158,15 +164,9 @@ public class Main extends AppCompatActivity {
                 String fecha = b.getString("fecha");
 
                 SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
-                Date fechaParseada;
-                try {
-                    fechaParseada = formater.parse(fecha);
-                } catch (ParseException e) {
-                    fechaParseada = new Date();
-                }
 
                 Encapsulador empresa = datos.get(pos);
-                datos.set(pos, new Encapsulador(empresa.getImagenId(), nombre, tipo, empresa.getRating(), fechaParseada, empresa.getAcabado()));
+                datos.set(pos, new Encapsulador(empresa.getImagenId(), nombre, tipo, empresa.getRating(), parsearFecha(formater, fecha)));
 
                 adaptador.notifyDataSetChanged();
 

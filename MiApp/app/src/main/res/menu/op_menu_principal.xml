@@ -1,5 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/nuevo_registro" android:title="Nuevo Registro" />
-    <item android:id="@+id/modificar_registro" android:title="Modificar registro" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_insertar"
+        android:title="@string/insertar_registro"
+        android:icon="@drawable/ic_launcher_foreground"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_modificar"
+        android:title="@string/modificar"
+        app:showAsAction="never" />
+
 </menu>

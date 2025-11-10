@@ -42,10 +42,10 @@ public abstract class Adaptador extends BaseAdapter {
             LayoutInflater vi = (LayoutInflater) contexto.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = vi.inflate(R_layout_idView, null);
         }
-        onEntrada(entradas.get(position), view);
+        onEntrada(entradas.get(position), view, position);
         return view;
     }
 
-    public abstract void onEntrada(Object entrada, View view);
+    public abstract void onEntrada(Object entrada, View view, int position);
 }
 

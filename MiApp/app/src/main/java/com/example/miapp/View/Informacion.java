@@ -48,7 +48,6 @@ public class Informacion extends AppCompatActivity {
     }
     @Override
     public void finish() {
-
         Intent intent = new Intent();
         intent.putExtra("posicion", getIntent().getIntExtra("posicion", -1));
         intent.putExtra("nombre_empresa", nombre.getText().toString());

@@ -2,13 +2,13 @@
 <resources>
     <style name="empresa">
         <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="tipo">
         <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:textSize">15dp</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
     <style name="fondo">

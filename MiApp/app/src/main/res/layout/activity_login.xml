@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:theme="@style/Theme.MiApp"
-    tools:context=".Controller.Login">
+    tools:context=".View.Login">
 
     <ImageView
         android:layout_width="100dp"

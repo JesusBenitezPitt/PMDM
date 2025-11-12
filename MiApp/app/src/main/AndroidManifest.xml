@@ -17,7 +17,7 @@
             android:name=".View.Anadir_Nuevo"
             android:exported="false" />
         <activity
-            android:name=".Controller.Register"
+            android:name=".View.Register"
             android:exported="false" />
         <activity
             android:name=".View.Informacion"
@@ -26,7 +26,7 @@
             android:name=".Main"
             android:exported="false" />
         <activity
-            android:name=".Controller.Login"
+            android:name=".View.Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

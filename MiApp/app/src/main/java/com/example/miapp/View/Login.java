@@ -1,4 +1,4 @@
-package com.example.miapp.Controller;
+package com.example.miapp.View;
 
 import android.content.Intent;
 import android.os.Bundle;

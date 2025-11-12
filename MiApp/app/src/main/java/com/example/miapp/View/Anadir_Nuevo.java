@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -24,7 +25,7 @@ public class Anadir_Nuevo extends AppCompatActivity {
     private static final int REQUEST_IMAGE = 1001;
     private EditText nombre_empresa;
     private EditText tipo_auditoria;
-    private EditText fecha_auditoria;
+    private DatePicker fecha_auditoria;
     private RatingBar rating_seguridad;
     private ImageView imageLogo;
     private Button boton_añadir;

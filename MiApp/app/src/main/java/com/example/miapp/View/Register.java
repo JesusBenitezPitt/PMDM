@@ -1,16 +1,13 @@
-package com.example.miapp.Controller;
+package com.example.miapp.View;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.miapp.R;
 
@@ -36,6 +33,8 @@ public class Register extends AppCompatActivity {
             public void onClick(View v) {
                 if (comprobarContraseñas(passwd.getText().toString(), confirmPasswd.getText().toString())) {
                     finish();
+                } else {
+                    Toast.makeText(Register.this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
                 }
             }
         });

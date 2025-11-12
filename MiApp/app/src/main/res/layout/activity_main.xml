@@ -14,7 +14,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:titleTextColor="@color/black"/>
+        android:titleTextColor="@color/white"
+        android:background="@color/morado"/>
 
     <ListView
         android:id="@+id/principa_lista_view"

@@ -60,11 +60,11 @@
             android:layout_gravity="center"
             android:text="Fecha: " />
 
-        <EditText
-            android:id="@+id/fecha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
+        <Button
+            android:id="@+id/botonDatePicker"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            style="?android:spinnerStyle" />
     </LinearLayout>
 
     <Button

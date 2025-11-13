@@ -12,30 +12,34 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.miapp.Model.Adaptador;
 import com.example.miapp.Model.Encapsulador;
 import com.example.miapp.View.Anadir_Nuevo;
+import com.example.miapp.View.Informacion;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class Main extends AppCompatActivity {
 
-    private static final int REQUEST_CODE_AÑADIR = 1;
+    private static final int REQUEST_CODE_ANADIR = 1;
     private static final int REQUEST_CODE_MODIFICAR = 2;
     private static final int REQUEST_CODE_CONSULTAR = 3;
-    private static final int REQUEST_CODE_ELIMINAR = 4;
 
     private int posicionSeleccionada = -1;
     private ListView lista;
@@ -43,8 +47,8 @@ public class Main extends AppCompatActivity {
     private ArrayList<Encapsulador> datos = new ArrayList<>();
     private Adaptador adaptador;
     private Toolbar toolBar;
-
-    private Date parsearFecha(SimpleDateFormat formato, String fechaString) {
+    SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+    private Date parsearFecha(String fechaString) {
         try {
             return formato.parse(fechaString);
         } catch (ParseException e) {
@@ -62,58 +66,37 @@ public class Main extends AppCompatActivity {
 
         setSupportActionBar(toolBar);
 
-        Calendar calendario = Calendar.getInstance();
-        Date fecha = calendario.getTime();
-
-        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-
-        datos.add(new Encapsulador(R.drawable.software, "TechCorp", "Pentest", 4, parsearFecha(formato, "15/08/2025")));
-        datos.add(new Encapsulador(R.drawable.industria, "IndusSecure", "Social Engineering", 3, parsearFecha(formato, "01/09/2025")));
-        datos.add(new Encapsulador(R.drawable.finanzas, "FinBank", "Red / Infra", 5, parsearFecha(formato, "30/07/2025")));
-        datos.add(new Encapsulador(R.drawable.salud, "MediCare", "Compliance / GDPR", 3, parsearFecha(formato, "05/10/2025")));
-        datos.add(new Encapsulador(R.drawable.educacion, "UniTech", "Cloud Security", 2, parsearFecha(formato, "20/09/2025")));
-        datos.add(new Encapsulador(R.drawable.e_commerce, "ShopZone", "Pentest", 4, parsearFecha(formato, "10/10/2025")));
+        datos.add(new Encapsulador(R.drawable.software, "TechCorp", "Pentest", 4, parsearFecha("15/08/2025")));
+        datos.add(new Encapsulador(R.drawable.industria, "IndusSecure", "Social Engineering", 3, parsearFecha("01/09/2025")));
+        datos.add(new Encapsulador(R.drawable.finanzas, "FinBank", "Red / Infra", 5, parsearFecha("30/07/2025")));
+        datos.add(new Encapsulador(R.drawable.salud, "MediCare", "Compliance / GDPR", 3, parsearFecha("05/10/2025")));
+        datos.add(new Encapsulador(R.drawable.educacion, "UniTech", "Cloud Security", 2, parsearFecha("20/09/2025")));
+        datos.add(new Encapsulador(R.drawable.e_commerce, "ShopZone", "Pentest", 4, parsearFecha("10/10/2025")));
 
         adaptador = new Adaptador(this, R.layout.entrada, datos) {
             @Override
             public void onEntrada(Object entrada, View view, int position) {
                 if (entrada != null){
 
+                    LinearLayout layoutMain = view.findViewById(R.id.layoutMain);
                     if (posicionSeleccionada == -1) {
-                        LinearLayout layoutMain = (LinearLayout) view.findViewById(R.id.layoutMain);
                         Animation animacion_entrada = AnimationUtils.loadAnimation(Main.this, R.anim.anim_entrada);
                         layoutMain.setAnimation(animacion_entrada);
                     }
 
-                    TextView empresa_texto = (TextView) view.findViewById(R.id.texto_titulo);
-                    TextView tipo_texto = (TextView) view.findViewById(R.id.texto_datos);
-                    ImageView imagen_entrada = (ImageView) view.findViewById(R.id.imagen);
-                    TextView fecha_texto = (TextView) view.findViewById(R.id.fecha);
-                    RadioButton radioButton = (RadioButton) view.findViewById(R.id.radiobutton);
+                    TextView empresa_texto = view.findViewById(R.id.texto_titulo);
+                    TextView tipo_texto = view.findViewById(R.id.texto_datos);
+                    ImageView imagen_entrada = view.findViewById(R.id.imagen);
+                    TextView fecha_texto = view.findViewById(R.id.fecha);
+                    RadioButton radioButton = view.findViewById(R.id.radiobutton);
                     RatingBar ratingBar = view.findViewById(R.id.ratingBar);
                     ratingBar.setRating((float)((Encapsulador)entrada).getRating());
 
-                    LinearLayout layoutClickable = (LinearLayout) view.findViewById(R.id.layoutClickable);
-                    registerForContextMenu(layoutClickable);
                     radioButton.setChecked(position == posicionSeleccionada);
 
-                    layoutClickable.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            posicionSeleccionada = position;
-                            adaptador.notifyDataSetChanged();
-
-                            Log.d("Prueba", "" + position + " " + posicionSeleccionada);
-
-//                            Intent intent = new Intent(Main.this, Informacion.class);
-//                            int position = lista.getPositionForView(v);
-//                            intent.putExtra("posicion", position);
-//                            intent.putExtra("nombre_empresa", empresa_texto.getText().toString());
-//                            intent.putExtra("tipo_auditoria", tipo_texto.getText().toString());
-//                            intent.putExtra("fecha", fecha_texto.getText().toString());
-//                            Bundle b = intent.getExtras();
-//                            startActivityForResult(intent, REQUEST_CODE_MODIFICAR ,b);
-                        }
+                    layoutMain.setOnClickListener(v -> {
+                        posicionSeleccionada = position;
+                        adaptador.notifyDataSetChanged(); // actualiza los RadioButtons
                     });
 
                     empresa_texto.setText(((Encapsulador) entrada).getEmpresa());
@@ -134,6 +117,7 @@ public class Main extends AppCompatActivity {
 
         };
         lista.setAdapter(adaptador);
+        registerForContextMenu(lista);
     }
 
     @Override
@@ -148,27 +132,13 @@ public class Main extends AppCompatActivity {
 
         if (id == R.id.menu_insertar) {
             Intent intent = new Intent(Main.this, Anadir_Nuevo.class);
-            startActivityForResult(intent, REQUEST_CODE_AÑADIR);
+            startActivityForResult(intent, REQUEST_CODE_ANADIR);
         } else if (id == R.id.menu_modificar) {
-            modificarElementoSeleccionado();
+            Intent intent = new Intent(Main.this, Informacion.class);
+            startActivityForResult(intent, REQUEST_CODE_MODIFICAR);
         }
         return super.onOptionsItemSelected(item);
     }
-
-    private void modificarElementoSeleccionado() {
-    }
-
-    private void insertarElemento() {
-        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-        Calendar calendario = Calendar.getInstance();
-        Date fecha = calendario.getTime();
-
-        datos.add(new Encapsulador(R.drawable.software, "NuevaEmpresa", "Nuevo Tipo", 3, fecha));
-
-        adaptador.notifyDataSetChanged();
-        lista.smoothScrollToPosition(datos.size() - 1);
-    }
-
 
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -176,10 +146,26 @@ public class Main extends AppCompatActivity {
     }
 
     @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        if (item.getItemId() == R.id.eliminar_registro) {
+            if (info != null && info.position >= 0 && info.position < datos.size()) {
+                datos.remove(info.position);
+                adaptador.notifyDataSetChanged();
+                Toast.makeText(this, "Registro eliminado", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
     public void onActivityResult(int request_code, int result_code, Intent i) {
         super.onActivityResult(request_code, result_code, i);
 
-        if (result_code == RESULT_OK && request_code == REQUEST_CODE_AÑADIR) {
+        if (result_code == RESULT_OK && request_code == REQUEST_CODE_ANADIR) {
             Bundle b = i.getExtras();
             if (b != null) {
                 String nombre = b.getString("nombre_empresa");
@@ -188,8 +174,7 @@ public class Main extends AppCompatActivity {
                 String uriString = b.getString("imagen_uri");
                 float rating = b.getFloat("rating");
 
-                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-                Date fechaDate = parsearFecha(formato, fecha);
+                Date fechaDate = parsearFecha(fecha);
 
                 if (uriString != null) {
                     Uri uri = Uri.parse(uriString);
@@ -212,14 +197,16 @@ public class Main extends AppCompatActivity {
                 String tipo = b.getString("tipo_auditoria");
                 String fecha = b.getString("fecha");
 
-                SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
-
                 Encapsulador empresa = datos.get(pos);
-                datos.set(pos, new Encapsulador(empresa.getImagenId(), nombre, tipo, empresa.getRating(), parsearFecha(formater, fecha)));
+                datos.set(pos, new Encapsulador(empresa.getImagenId(), nombre, tipo, empresa.getRating(), parsearFecha(fecha)));
 
                 adaptador.notifyDataSetChanged();
                 lista.smoothScrollToPosition(pos);
             }
+        }
+
+        if (result_code == RESULT_OK && request_code == REQUEST_CODE_CONSULTAR) {
+
         }
     }
 }

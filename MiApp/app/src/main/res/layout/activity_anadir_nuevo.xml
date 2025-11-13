@@ -13,8 +13,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Información de la empresa:"
-        android:textSize="30dp" />
+        android:text="Añadir nuevo registro:"
+        android:textSize="30dp"
+        android:textStyle="bold"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,12 +61,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Fecha: " />
-
-        <DatePicker
-            android:id="@+id/fecha"
-            android:layout_width="match_parent"
+        
+        <Button
+            android:id="@+id/botonDatePicker"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:datePickerMode="calendar" />
+            android:text="01/01/2025"
+            android:textColor="@color/black"
+            style="?android:spinnerStyle"/>
 
 
     </LinearLayout>
@@ -106,11 +109,10 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:src="@drawable/add_a_photo"
-        android:scaleType="centerCrop"
-        android:background="@android:color/darker_gray"
-        android:clickable="true"
-        android:focusable="true"
-        android:contentDescription="Logo de la empresa" />
+            android:scaleType="centerCrop"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="Logo de la empresa" />
 
     </LinearLayout>
 

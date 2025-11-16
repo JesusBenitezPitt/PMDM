@@ -3,7 +3,6 @@ package com.example.miapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -27,11 +26,11 @@ import com.example.miapp.Model.Adaptador;
 import com.example.miapp.Model.Encapsulador;
 import com.example.miapp.View.Anadir_Nuevo;
 import com.example.miapp.View.Informacion;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -43,7 +42,6 @@ public class Main extends AppCompatActivity {
 
     private int posicionSeleccionada = -1;
     private ListView lista;
-//    private RadioButton radioButton_pulsado;
     private ArrayList<Encapsulador> datos = new ArrayList<>();
     private Adaptador adaptador;
     private Toolbar toolBar;
@@ -66,12 +64,12 @@ public class Main extends AppCompatActivity {
 
         setSupportActionBar(toolBar);
 
-        datos.add(new Encapsulador(R.drawable.software, "TechCorp", "Pentest", 4, parsearFecha("15/08/2025")));
-        datos.add(new Encapsulador(R.drawable.industria, "IndusSecure", "Social Engineering", 3, parsearFecha("01/09/2025")));
-        datos.add(new Encapsulador(R.drawable.finanzas, "FinBank", "Red / Infra", 5, parsearFecha("30/07/2025")));
-        datos.add(new Encapsulador(R.drawable.salud, "MediCare", "Compliance / GDPR", 3, parsearFecha("05/10/2025")));
-        datos.add(new Encapsulador(R.drawable.educacion, "UniTech", "Cloud Security", 2, parsearFecha("20/09/2025")));
-        datos.add(new Encapsulador(R.drawable.e_commerce, "ShopZone", "Pentest", 4, parsearFecha("10/10/2025")));
+        datos.add(new Encapsulador(R.drawable.software, "TechCorp", "Pentest", 4, parsearFecha("15/08/2025"), "Descripcion", "Pagina web", "Numero de telefono"));
+        datos.add(new Encapsulador(R.drawable.industria, "IndusSecure", "Social Engineering", 3, parsearFecha("01/09/2025"), "Descripcion", "Pagina web", "Numero de telefono"));
+        datos.add(new Encapsulador(R.drawable.finanzas, "FinBank", "Red / Infra", 5, parsearFecha("30/07/2025"), "Descripcion", "Pagina web", "Numero de telefono"));
+        datos.add(new Encapsulador(R.drawable.salud, "MediCare", "Compliance / GDPR", 3, parsearFecha("05/10/2025"), "Descripcion", "Pagina web", "Numero de telefono"));
+        datos.add(new Encapsulador(R.drawable.educacion, "UniTech", "Cloud Security", 2, parsearFecha("20/09/2025"), "Descripcion", "Pagina web", "Numero de telefono"));
+        datos.add(new Encapsulador(R.drawable.e_commerce, "ShopZone", "Pentest", 4, parsearFecha("10/10/2025"), "Descripcion", "Pagina web", "Numero de telefono"));
 
         adaptador = new Adaptador(this, R.layout.entrada, datos) {
             @Override
@@ -118,6 +116,22 @@ public class Main extends AppCompatActivity {
         };
         lista.setAdapter(adaptador);
         registerForContextMenu(lista);
+
+        FloatingActionButton fab = findViewById(R.id.add);
+        fab.setOnClickListener(v -> {
+            Encapsulador i = datos.get(posicionSeleccionada);
+            Intent intent = new Intent(Main.this, Informacion.class);
+            intent.putExtra("modo", "consultar");
+            intent.putExtra("posicion", posicionSeleccionada);
+            intent.putExtra("nombre_empresa", i.getEmpresa());
+            intent.putExtra("tipo_auditoria", i.getTipo());
+            intent.putExtra("fecha", i.getFecha().toString());
+            intent.putExtra("descripcion", i.getDescripcion());
+            intent.putExtra("pagina", i.getPagina_web());
+            intent.putExtra("num", i.getNum_telefono());
+            intent.putExtra("rating", i.getRating());
+            startActivityForResult(intent, REQUEST_CODE_CONSULTAR);
+        });
     }
 
     @Override
@@ -134,8 +148,22 @@ public class Main extends AppCompatActivity {
             Intent intent = new Intent(Main.this, Anadir_Nuevo.class);
             startActivityForResult(intent, REQUEST_CODE_ANADIR);
         } else if (id == R.id.menu_modificar) {
-            Intent intent = new Intent(Main.this, Informacion.class);
-            startActivityForResult(intent, REQUEST_CODE_MODIFICAR);
+            if (posicionSeleccionada == -1){
+                Toast.makeText(this, "Tienes que seleccionar un elemento para modificarlo.", Toast.LENGTH_SHORT).show();
+            } else {
+                Encapsulador i = datos.get(posicionSeleccionada);
+                Intent intent = new Intent(Main.this, Informacion.class);
+                intent.putExtra("modo", "modificar");
+                intent.putExtra("posicion", posicionSeleccionada);
+                intent.putExtra("nombre_empresa", i.getEmpresa());
+                intent.putExtra("tipo_auditoria", i.getTipo());
+                intent.putExtra("fecha", i.getFecha());
+                intent.putExtra("descripcion", i.getDescripcion());
+                intent.putExtra("pagina", i.getPagina_web());
+                intent.putExtra("num", i.getNum_telefono());
+                intent.putExtra("rating", i.getRating());
+                startActivityForResult(intent, REQUEST_CODE_MODIFICAR);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -171,17 +199,14 @@ public class Main extends AppCompatActivity {
                 String nombre = b.getString("nombre_empresa");
                 String tipo = b.getString("tipo_auditoria");
                 String fecha = b.getString("fecha");
-                String uriString = b.getString("imagen_uri");
                 float rating = b.getFloat("rating");
+                String descripcion = b.getString("descripcion");
+                String pagina = b.getString("pagina");
+                String num = b.getString("num");
 
                 Date fechaDate = parsearFecha(fecha);
 
-                if (uriString != null) {
-                    Uri uri = Uri.parse(uriString);
-                    datos.add(new Encapsulador(uri, nombre, tipo, rating, fechaDate));
-                } else {
-                    datos.add(new Encapsulador(R.mipmap.ic_launcher, nombre, tipo, rating, fechaDate));
-                }
+                datos.add(new Encapsulador(R.mipmap.ic_launcher, nombre, tipo, rating, fechaDate, descripcion, pagina, num));
 
                 adaptador.notifyDataSetChanged();
                 lista.smoothScrollToPosition(datos.size() - 1);
@@ -196,17 +221,18 @@ public class Main extends AppCompatActivity {
                 String nombre = b.getString("nombre_empresa");
                 String tipo = b.getString("tipo_auditoria");
                 String fecha = b.getString("fecha");
+                float rating = b.getFloat("rating");
+                Log.d("prueba", "" + rating);
+                String descripcion = b.getString("descripcion");
+                String pagina = b.getString("pagina");
+                String num = b.getString("num");
 
                 Encapsulador empresa = datos.get(pos);
-                datos.set(pos, new Encapsulador(empresa.getImagenId(), nombre, tipo, empresa.getRating(), parsearFecha(fecha)));
+                datos.set(pos, new Encapsulador(empresa.getImagenId(), nombre, tipo, rating, parsearFecha(fecha), descripcion, pagina, num));
 
                 adaptador.notifyDataSetChanged();
                 lista.smoothScrollToPosition(pos);
             }
-        }
-
-        if (result_code == RESULT_OK && request_code == REQUEST_CODE_CONSULTAR) {
-
         }
     }
 }

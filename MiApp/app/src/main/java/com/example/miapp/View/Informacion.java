@@ -4,10 +4,12 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -21,6 +23,10 @@ public class Informacion extends AppCompatActivity {
 
     private EditText nombre;
     private EditText tipo;
+    private RatingBar rating;
+    private EditText description;
+    private EditText pagina;
+    private EditText num;
     private int posicion;
     private Button boton_fecha;
     private DatePickerDialog datePickerDialog;
@@ -37,14 +43,45 @@ public class Informacion extends AppCompatActivity {
         boton_fecha = findViewById(R.id.botonDatePicker);
         nombre = findViewById(R.id.nombre_empresa);
         tipo = findViewById(R.id.tipo_auditoria);
+        rating = findViewById(R.id.nivel_seguridad);
+        description = findViewById(R.id.descripcion);
+        pagina = findViewById(R.id.pagina_web);
+        num = findViewById(R.id.num_telefono);
+
+        String modo = "";
 
         Bundle b = getIntent().getExtras();
-        posicion = b.getInt("posicion");
-        nombre.setText(b.getString("nombre_empresa"));
-        tipo.setText(b.getString("tipo_auditoria"));
-        boton_fecha.setText(fechaActual());
+        if(b != null) {
+            modo = b.getString("modo");
+            posicion = b.getInt("posicion");
+            nombre.setText(b.getString("nombre_empresa"));
+            tipo.setText(b.getString("tipo_auditoria"));
+            rating.setRating((float) b.getDouble("rating"));
+            description.setText(b.getString("descripcion"));
+            pagina.setText(b.getString("pagina"));
+            num.setText(b.getString("num"));
+
+            boton_fecha.setText(fechaActual());
+        }
 
         Button boton = findViewById(R.id.guardar);
+
+        if(modo.equals("consultar")){
+            nombre.setClickable(false);
+            nombre.setFocusable(false);
+            tipo.setClickable(false);
+            tipo.setFocusable(false);
+            rating.setEnabled(false);
+            description.setClickable(false);
+            description.setFocusable(false);
+            pagina.setClickable(false);
+            pagina.setFocusable(false);
+            num.setClickable(false);
+            num.setFocusable(false);
+            boton_fecha.setEnabled(false);
+
+            boton.setText("Volver");
+        }
 
         boton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +137,10 @@ public class Informacion extends AppCompatActivity {
         intent.putExtra("nombre_empresa", nombre.getText().toString());
         intent.putExtra("tipo_auditoria", tipo.getText().toString());
         intent.putExtra("fecha", boton_fecha.getText().toString());
+        intent.putExtra("rating", rating.getRating());
+        intent.putExtra("descripcion", description.getText().toString());
+        intent.putExtra("pagina", pagina.getText().toString());
+        intent.putExtra("num", num.getText().toString());
         setResult(RESULT_OK, intent);
         super.finish();
         Toast.makeText(Informacion.this, "Se ha guardado la información correctamente", Toast.LENGTH_SHORT).show();

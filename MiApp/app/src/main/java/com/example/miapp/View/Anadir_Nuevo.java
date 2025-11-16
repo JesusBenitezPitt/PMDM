@@ -30,11 +30,12 @@ public class Anadir_Nuevo extends AppCompatActivity {
     private static final int REQUEST_IMAGE = 1001;
     private EditText nombre_empresa;
     private EditText tipo_auditoria;
+    private EditText descripcion;
+    private EditText pagina;
+    private EditText num;
     private Button boton_fecha;
     private RatingBar rating_seguridad;
-    private ImageView imageLogo;
     private Button boton_añadir;
-    private Uri imagenUriSeleccionada = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,29 +43,21 @@ public class Anadir_Nuevo extends AppCompatActivity {
         setContentView(R.layout.activity_anadir_nuevo);
         initDatePickerDialog();
 
-        imageLogo = findViewById(R.id.imageLogo);
         nombre_empresa = findViewById(R.id.nombre_empresa);
         tipo_auditoria = findViewById(R.id.tipo_auditoria);
         boton_fecha = findViewById(R.id.botonDatePicker);
         rating_seguridad = findViewById(R.id.rating_seguridad);
+        descripcion = findViewById(R.id.descripcion);
+        pagina = findViewById(R.id.pagina_web);
+        num = findViewById(R.id.num_telefono);
 
         boton_añadir = findViewById(R.id.añadir);
 
         boton_fecha.setText(fechaActual());
-
-        imageLogo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent, REQUEST_IMAGE);
-            }
-        });
         
         boton_añadir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Prueba", "Nombre: " + nombre_empresa.getText().toString() + "\nTipo: " + tipo_auditoria.getText().toString() + "\nFecha: " + boton_fecha.getText().toString() + "\nRating: " + rating_seguridad.getRating() + "\nImagen: " + imageLogo.toString());
                 if(nombre_empresa.getText().toString().isEmpty() || tipo_auditoria.getText().toString().isEmpty() || boton_fecha.getText().toString().isEmpty() || boton_fecha.getText().toString().isEmpty()){
                     Toast.makeText(Anadir_Nuevo.this, "Tienes que rellenar los campos para guardar una nueva auditoria.", Toast.LENGTH_SHORT).show();
                 } else {
@@ -122,18 +115,10 @@ public class Anadir_Nuevo extends AppCompatActivity {
         intent.putExtra("tipo_auditoria", tipo_auditoria.getText().toString());
         intent.putExtra("fecha", boton_fecha.getText().toString());
         intent.putExtra("rating", rating_seguridad.getRating());
-        intent.putExtra("imagen_uri", imageLogo.toString());
+        intent.putExtra("descripcion", descripcion.getText().toString());
+        intent.putExtra("pagina", pagina.getText().toString());
+        intent.putExtra("num", num.getText().toString());
         setResult(RESULT_OK, intent);
         super.finish();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_IMAGE && resultCode == RESULT_OK && data != null) {
-            Uri imageUri = data.getData();
-            imageLogo.setImageURI(imageUri);
-        }
     }
 }

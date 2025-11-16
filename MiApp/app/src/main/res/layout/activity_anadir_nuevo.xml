@@ -102,18 +102,46 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Logo de la empresa: " />
+            android:text="Descripcion: " />
 
-        <ImageView
-            android:id="@+id/imageLogo"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/add_a_photo"
-            android:scaleType="centerCrop"
-            android:clickable="true"
-            android:focusable="true"
-            android:contentDescription="Logo de la empresa" />
+        <EditText
+            android:id="@+id/descripcion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Pagina web: " />
+
+        <EditText
+            android:id="@+id/pagina_web"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Numero de telefono: " />
+
+        <EditText
+            android:id="@+id/num_telefono"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <Button

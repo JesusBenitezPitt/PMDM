@@ -1,21 +1,24 @@
 package com.example.miapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.zip.Inflater;
 
 public class Main extends AppCompatActivity {
 
@@ -86,15 +90,19 @@ public class Main extends AppCompatActivity {
                     TextView tipo_texto = view.findViewById(R.id.texto_datos);
                     ImageView imagen_entrada = view.findViewById(R.id.imagen);
                     TextView fecha_texto = view.findViewById(R.id.fecha);
-                    RadioButton radioButton = view.findViewById(R.id.radiobutton);
                     RatingBar ratingBar = view.findViewById(R.id.ratingBar);
                     ratingBar.setRating((float)((Encapsulador)entrada).getRating());
 
-                    radioButton.setChecked(position == posicionSeleccionada);
-
                     layoutMain.setOnClickListener(v -> {
                         posicionSeleccionada = position;
-                        adaptador.notifyDataSetChanged(); // actualiza los RadioButtons
+                    });
+
+                    layoutMain.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            posicionSeleccionada = position;
+                            return false;
+                        }
                     });
 
                     empresa_texto.setText(((Encapsulador) entrada).getEmpresa());
@@ -139,11 +147,10 @@ public class Main extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.op_menu_principal, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        Log.d("Prueba", "Insertar: " + R.id.menu_insertar + ", Modificar: " + R.id.menu_modificar);
-
         if (id == R.id.menu_insertar) {
             Intent intent = new Intent(Main.this, Anadir_Nuevo.class);
             startActivityForResult(intent, REQUEST_CODE_ANADIR);
@@ -177,11 +184,31 @@ public class Main extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.custom_toast));
+        TextView text = layout.findViewById(R.id.toast_text);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(Main.this);
+        builder.setTitle("Eliminar registro");
+        builder.setMessage("Estas seguro de que quieres eliminar el registro de la empresa " + datos.get(posicionSeleccionada).getEmpresa());
+        builder.setPositiveButton("Si", (dialog, which) -> {
+            datos.remove(posicionSeleccionada);
+            adaptador.notifyDataSetChanged();
+            text.setText("Registro eliminado");
+
+            Toast toast = new Toast(Main.this);
+            toast.setView(layout);
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.show();
+        });
+        builder.setNegativeButton("No", (dialog, which) -> {
+            Toast.makeText(this, "Eliminacion cancelada", Toast.LENGTH_SHORT).show();
+        });
+
         if (item.getItemId() == R.id.eliminar_registro) {
             if (info != null && info.position >= 0 && info.position < datos.size()) {
-                datos.remove(info.position);
-                adaptador.notifyDataSetChanged();
-                Toast.makeText(this, "Registro eliminado", Toast.LENGTH_SHORT).show();
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
             return true;
         }

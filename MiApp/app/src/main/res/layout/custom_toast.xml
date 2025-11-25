@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:id="@+id/custom_toast"
     android:orientation="horizontal"
-    android:background="@color/white"
+    android:background="@drawable/custom_toast_shape"
     android:gravity="center">
 
     <ImageView

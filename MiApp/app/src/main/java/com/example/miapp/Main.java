@@ -201,8 +201,14 @@ public class Main extends AppCompatActivity {
             toast.setDuration(Toast.LENGTH_LONG);
             toast.show();
         });
+
         builder.setNegativeButton("No", (dialog, which) -> {
-            Toast.makeText(this, "Eliminacion cancelada", Toast.LENGTH_SHORT).show();
+            text.setText("Eliminacion cancelada");
+
+            Toast toast = new Toast(Main.this);
+            toast.setView(layout);
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.show();
         });
 
         if (item.getItemId() == R.id.eliminar_registro) {

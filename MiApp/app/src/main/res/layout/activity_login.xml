@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:theme="@style/Theme.MiApp"
+    android:theme="@style/MiTemaPersonalizado"
     tools:context=".View.Login">
 
     <ImageView
@@ -22,7 +22,7 @@
         android:paddingTop="30dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:hint="Usuario"
+        android:hint="@string/user"
         android:imeOptions="actionNext"
         android:inputType="text" />
 
@@ -31,7 +31,7 @@
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:hint="Contraseña"
+        android:hint="@string/passwd"
         android:imeOptions="actionDone"
         android:inputType="textPassword" />
 
@@ -42,13 +42,14 @@
         android:gravity="center"
         android:paddingTop="20dp" >
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/botonLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Entrar" />
+            android:text="Entrar"
+            android:layout_marginRight="6dp"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/botonRegistrar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

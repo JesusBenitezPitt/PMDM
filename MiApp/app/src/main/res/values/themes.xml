@@ -1,8 +1,8 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.MiApp" parent="Theme.Material3.DayNight.NoActionBar">
+<resources>
+    <style name="MiTemaPersonalizado" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/main</item>
-    </style>
+        <item name="colorSecondary">@color/black</item>
 
-    <style name="Theme.MiApp" parent="Base.Theme.MiApp" />
+        <item name="materialButtonStyle">@style/MiMaterialButton</item>
+    </style>
 </resources>

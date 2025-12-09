@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:theme="@style/Theme.MiApp"
+    android:theme="@style/MiTemaPersonalizado"
     tools:context=".View.Login">
 
     <ImageView
@@ -51,7 +51,7 @@
         android:gravity="center"
         android:paddingTop="20dp" >
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/boton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

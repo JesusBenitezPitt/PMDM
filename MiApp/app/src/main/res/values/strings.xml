@@ -2,4 +2,6 @@
     <string name="app_name">SecureOps</string>
     <string name="modificar">Modificar</string>
     <string name="insertar_registro">Insertar registro</string>
+    <string name="passwd">Contraseña</string>
+    <string name="user">Usuario</string>
 </resources>

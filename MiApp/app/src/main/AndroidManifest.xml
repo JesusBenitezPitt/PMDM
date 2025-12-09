@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/logo_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MiApp">
+        android:theme="@style/MiTemaPersonalizado">
         <activity
             android:name=".View.Anadir_Nuevo"
             android:exported="false" />

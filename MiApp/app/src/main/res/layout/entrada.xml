@@ -6,7 +6,7 @@
     android:orientation="horizontal"
     android:longClickable="true"
     style="@style/fondo"
-    android:theme="@style/Theme.MiApp" >
+    android:theme="@style/MiTemaPersonalizado" >
 
     <LinearLayout
         android:paddingLeft="10dp"

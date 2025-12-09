@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import com.example.miapp.Model.Adaptador;
 import com.example.miapp.Model.Encapsulador;
@@ -67,6 +68,8 @@ public class Main extends AppCompatActivity {
         toolBar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolBar);
+
+        toolBar.setTitleTextColor(ContextCompat.getColor(this, R.color.white));
 
         datos.add(new Encapsulador(R.drawable.software, "TechCorp", "Pentest", 4, parsearFecha("15/08/2025"), "Descripcion", "Pagina web", "Numero de telefono"));
         datos.add(new Encapsulador(R.drawable.industria, "IndusSecure", "Social Engineering", 3, parsearFecha("01/09/2025"), "Descripcion", "Pagina web", "Numero de telefono"));
@@ -188,7 +191,7 @@ public class Main extends AppCompatActivity {
         View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.custom_toast));
         TextView text = layout.findViewById(R.id.toast_text);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(Main.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(Main.this, R.style.MiEstiloDialogo);
         builder.setTitle("Eliminar registro");
         builder.setMessage("Estas seguro de que quieres eliminar el registro de la empresa " + datos.get(posicionSeleccionada).getEmpresa());
         builder.setPositiveButton("Si", (dialog, which) -> {

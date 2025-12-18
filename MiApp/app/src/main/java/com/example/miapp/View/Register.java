@@ -2,6 +2,7 @@ package com.example.miapp.View;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,7 +32,7 @@ public class Register extends AppCompatActivity {
         boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (comprobarContraseñas(passwd.getText().toString(), confirmPasswd.getText().toString())) {
+                if (comprobarPasswd(passwd.getText().toString(), confirmPasswd.getText().toString())) {
                     finish();
                 } else {
                     Toast.makeText(Register.this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
@@ -45,11 +46,12 @@ public class Register extends AppCompatActivity {
         Intent intent = new Intent();
         intent.putExtra("user", usuario.getText().toString());
         intent.putExtra("passwd", passwd.getText().toString());
+        Log.d("Prueba", usuario.getText().toString() + " " + passwd.getText().toString());
         setResult(RESULT_OK, intent);
         super.finish();
     }
 
-    private boolean comprobarContraseñas(String p1, String p2){
+    private boolean comprobarPasswd(String p1, String p2){
         return p1.equals(p2);
     }
 }

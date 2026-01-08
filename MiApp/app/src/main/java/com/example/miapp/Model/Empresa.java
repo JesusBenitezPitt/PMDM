@@ -35,8 +35,8 @@ public class Empresa {
     @ColumnInfo(name = "user_id")
     public int userId;
 
-    public Empresa(String empresa, String tipo, double rating, Date fecha, String descripcion, String paginaWeb, String numTelefono, int userId) {
-        this.nombre = empresa;
+    public Empresa(String nombre, String tipo, double rating, Date fecha, String descripcion, String paginaWeb, String numTelefono, int userId) {
+        this.nombre = nombre;
         this.tipo = tipo;
         this.rating = rating;
         this.fecha = fecha;

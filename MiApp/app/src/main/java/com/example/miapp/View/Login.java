@@ -37,20 +37,19 @@ public class Login extends AppCompatActivity {
         prefs = getPreferences(Context.MODE_PRIVATE);
 
         editor = prefs.edit();
+        editor.clear();
         editor.putString("Usuario1", "Usuario1,1234,1");
         editor.putString("Usuario2", "Usuario2,4567,2");
         editor.apply();
+
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Usuario usuario1 = new Usuario(usuario.getText().toString(), passwd.getText().toString());
                 String valor = prefs.getString(usuario1.getName(), " ");
-                Log.d("Prueba", valor);
-                String[] datos = valor.split(",");
-                Log.d("Prueba", datos[0]);
-                Usuario usuario2 = new Usuario(datos[0], datos[1]);
-                if (usuario1.equals(usuario2)) {
+                if (!valor.equals(" ")) {
+                    String[] datos = valor.split(",");
                     Intent pantalla2 = new Intent(Login.this, Main.class);
                     pantalla2.putExtra("userId", Integer.parseInt(datos[2]));
                     startActivity(pantalla2);

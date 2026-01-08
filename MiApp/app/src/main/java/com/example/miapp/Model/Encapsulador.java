@@ -8,7 +8,7 @@ public class Encapsulador {
     private int imagen;
     private Uri imagenUri;
     private String empresa;
-    private String texto;
+    private String tipo;
     private double rating;
     private Date fecha;
     private String descripcion;
@@ -19,7 +19,7 @@ public class Encapsulador {
     public Encapsulador(int idImagen, String empresa, String tipo, double rating, Date fecha, String descripcion, String pagina_web, String num_telefono, int userId) {
         this.imagen = idImagen;
         this.empresa = empresa;
-        this.texto = tipo;
+        this.tipo = tipo;
         this.rating = rating;
         this.fecha = fecha;
         this.descripcion = descripcion;
@@ -28,10 +28,22 @@ public class Encapsulador {
         this.userId = userId;
     }
 
+    public Encapsulador (int idImagen, Empresa empresa){
+        this.imagen = idImagen;
+        this.empresa = empresa.nombre;
+        this.tipo = empresa.tipo;
+        this.rating = empresa.rating;
+        this.fecha = empresa.fecha;
+        this.descripcion = empresa.descripcion;
+        this.pagina_web = empresa.paginaWeb;
+        this.num_telefono = empresa.numTelefono;
+        this.userId = empresa.userId;
+    }
+
     public Encapsulador(Uri imagenUri, String empresa, String tipo, double rating, Date fecha) {
         this.imagenUri = imagenUri;
         this.empresa = empresa;
-        this.texto = tipo;
+        this.tipo = tipo;
         this.rating = rating;
         this.fecha = fecha;
         this.imagen = 0;
@@ -50,7 +62,7 @@ public class Encapsulador {
     }
 
     public String getTipo() {
-        return texto;
+        return tipo;
     }
 
     public double getRating() {

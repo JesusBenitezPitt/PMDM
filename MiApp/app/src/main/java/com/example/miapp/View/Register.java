@@ -48,7 +48,9 @@ public class Register extends AppCompatActivity {
         Usuario user = new Usuario(usuario.getText().toString(), passwd.getText().toString());
         String valor = Login.prefs.getString(user.getName(), " ");
         if (valor.equals(" ")) {
-            Login.editor.putString(user.getName(), user.getName() + "," + user.getPasswd());
+            int nextId = Login.prefs.getInt("nextUserId", 3);
+            Login.editor.putString(user.getName(), user.getName() + "," + user.getPasswd() + "," + nextId);
+            Login.editor.putInt("nextUserId", nextId + 1);
             Login.editor.apply();
             setResult(RESULT_OK, intent);
             super.finish();

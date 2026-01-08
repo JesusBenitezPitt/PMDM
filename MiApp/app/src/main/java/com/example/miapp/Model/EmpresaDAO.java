@@ -15,6 +15,6 @@ public interface EmpresaDAO {
     @Insert
     void insertAll(List<Empresa> empresas);
 
-    @Query("SELECT * FROM empresa WHERE user_id IN (:userId)")
+    @Query("SELECT * FROM empresas WHERE user_id IN (:userId)")
     List<Empresa> getAll(int userId);
 }

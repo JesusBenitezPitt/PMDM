@@ -3,6 +3,13 @@ package com.example.miapp.Model;
 public class Usuario {
     private String name;
     private String passwd;
+    private int Id;
+
+    public Usuario(String name, String passwd, int Id) {
+        this.name = name;
+        this.passwd = passwd;
+        this.Id = Id;
+    }
 
     public Usuario(String name, String passwd) {
         this.name = name;

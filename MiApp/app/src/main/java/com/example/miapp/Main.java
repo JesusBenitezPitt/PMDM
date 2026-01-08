@@ -25,8 +25,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.room.Room;
 
+import com.example.miapp.Controller.AppDatabase;
 import com.example.miapp.Model.Adaptador;
+import com.example.miapp.Model.Empresa;
+import com.example.miapp.Model.EmpresaDAO;
 import com.example.miapp.Model.Encapsulador;
 import com.example.miapp.View.Anadir_Nuevo;
 import com.example.miapp.View.Informacion;
@@ -36,6 +40,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.zip.Inflater;
 
@@ -71,12 +76,43 @@ public class Main extends AppCompatActivity {
 
         toolBar.setTitleTextColor(ContextCompat.getColor(this, R.color.white));
 
-        datos.add(new Encapsulador(R.drawable.software, "TechCorp", "Pentest", 4, parsearFecha("15/08/2025"), "Descripcion", "Pagina web", "Numero de telefono"));
-        datos.add(new Encapsulador(R.drawable.industria, "IndusSecure", "Social Engineering", 3, parsearFecha("01/09/2025"), "Descripcion", "Pagina web", "Numero de telefono"));
-        datos.add(new Encapsulador(R.drawable.finanzas, "FinBank", "Red / Infra", 5, parsearFecha("30/07/2025"), "Descripcion", "Pagina web", "Numero de telefono"));
-        datos.add(new Encapsulador(R.drawable.salud, "MediCare", "Compliance / GDPR", 3, parsearFecha("05/10/2025"), "Descripcion", "Pagina web", "Numero de telefono"));
-        datos.add(new Encapsulador(R.drawable.educacion, "UniTech", "Cloud Security", 2, parsearFecha("20/09/2025"), "Descripcion", "Pagina web", "Numero de telefono"));
-        datos.add(new Encapsulador(R.drawable.e_commerce, "ShopZone", "Pentest", 4, parsearFecha("10/10/2025"), "Descripcion", "Pagina web", "Numero de telefono"));
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "secure-ops").build();
+        EmpresaDAO empresaDAO = db.empresaDAO();
+
+        datos.add(new Encapsulador(R.drawable.software, "TechCorp", "Pentest", 4, parsearFecha("15/08/2025"), "Descripcion", "Pagina web", "Numero de telefono", 1));
+        datos.add(new Encapsulador(R.drawable.industria, "IndusSecure", "Social Engineering", 3, parsearFecha("01/09/2025"), "Descripcion", "Pagina web", "Numero de telefono", 2));
+        datos.add(new Encapsulador(R.drawable.finanzas, "FinBank", "Red / Infra", 5, parsearFecha("30/07/2025"), "Descripcion", "Pagina web", "Numero de telefono", 3));
+        datos.add(new Encapsulador(R.drawable.salud, "MediCare", "Compliance / GDPR", 3, parsearFecha("05/10/2025"), "Descripcion", "Pagina web", "Numero de telefono", 1));
+        datos.add(new Encapsulador(R.drawable.educacion, "UniTech", "Cloud Security", 2, parsearFecha("20/09/2025"), "Descripcion", "Pagina web", "Numero de telefono", 2));
+        datos.add(new Encapsulador(R.drawable.e_commerce, "ShopZone", "Pentest", 4, parsearFecha("10/10/2025"), "Descripcion", "Pagina web", "Numero de telefono", 3));
+
+        List<Empresa> empresas = new ArrayList<>();
+
+        for (Encapsulador e : datos) {
+            empresas.add(new Empresa(
+                    e.getEmpresa(),
+                    e.getTipo(),
+                    e.getRating(),
+                    e.getFecha(),
+                    e.getDescripcion(),
+                    e.getPagina_web(),
+                    e.getNum_telefono(),
+                    e.getUserId()
+            ));
+        }
+
+        new Thread(() -> {
+            empresaDAO.insertAll(empresas);
+            Toast.makeText(this, "Inserccion realizada con exito.", Toast.LENGTH_SHORT).show();
+        }).start();
+
+//        Intent intentUserId = getIntent();
+//        int userId = intentUserId.getIntExtra("userId", -1);
+//        List<Empresa> empresas = empresaDAO.getAll(userId);
+//
+//        for (Empresa empresa : empresas) {
+//            datos.add(new Encapsulador(R.mipmap.ic_launcher, empresa.nombre, empresa.tipo, empresa.rating, empresa.fecha, empresa.descripcion, empresa.paginaWeb, empresa.numTelefono, empresa.userId));
+//        }
 
         adaptador = new Adaptador(this, R.layout.entrada, datos) {
             @Override
@@ -242,7 +278,7 @@ public class Main extends AppCompatActivity {
 
                 Date fechaDate = parsearFecha(fecha);
 
-                datos.add(new Encapsulador(R.mipmap.ic_launcher, nombre, tipo, rating, fechaDate, descripcion, pagina, num));
+                datos.add(new Encapsulador(R.mipmap.ic_launcher, nombre, tipo, rating, fechaDate, descripcion, pagina, num, 1));
 
                 adaptador.notifyDataSetChanged();
                 lista.smoothScrollToPosition(datos.size() - 1);
@@ -264,7 +300,7 @@ public class Main extends AppCompatActivity {
                 String num = b.getString("num");
 
                 Encapsulador empresa = datos.get(pos);
-                datos.set(pos, new Encapsulador(empresa.getImagenId(), nombre, tipo, rating, parsearFecha(fecha), descripcion, pagina, num));
+                datos.set(pos, new Encapsulador(empresa.getImagenId(), nombre, tipo, rating, parsearFecha(fecha), descripcion, pagina, num, 1));
 
                 adaptador.notifyDataSetChanged();
                 lista.smoothScrollToPosition(pos);

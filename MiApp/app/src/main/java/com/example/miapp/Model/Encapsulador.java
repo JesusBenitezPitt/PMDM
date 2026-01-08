@@ -14,8 +14,9 @@ public class Encapsulador {
     private String descripcion;
     private String pagina_web;
     private String num_telefono;
+    private int userId;
 
-    public Encapsulador(int idImagen, String empresa, String tipo, double rating, Date fecha, String descripcion, String pagina_web, String num_telefono) {
+    public Encapsulador(int idImagen, String empresa, String tipo, double rating, Date fecha, String descripcion, String pagina_web, String num_telefono, int userId) {
         this.imagen = idImagen;
         this.empresa = empresa;
         this.texto = tipo;
@@ -24,6 +25,7 @@ public class Encapsulador {
         this.descripcion = descripcion;
         this.pagina_web = pagina_web;
         this.num_telefono = num_telefono;
+        this.userId = userId;
     }
 
     public Encapsulador(Uri imagenUri, String empresa, String tipo, double rating, Date fecha) {
@@ -70,5 +72,7 @@ public class Encapsulador {
     public String getNum_telefono() {
         return num_telefono;
     }
+
+    public int getUserId(){return userId; }
 
 }

@@ -21,8 +21,8 @@ import java.util.List;
 
 public class Login extends AppCompatActivity {
 
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
+    static SharedPreferences prefs;
+    static SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +37,8 @@ public class Login extends AppCompatActivity {
         prefs = getPreferences(Context.MODE_PRIVATE);
 
         editor = prefs.edit();
-        editor.putString("Usuario1", "Usuario1,1234");
-        editor.putString("Usuario2", "Usuario2,4567");
+        editor.putString("Usuario1", "Usuario1,1234,1");
+        editor.putString("Usuario2", "Usuario2,4567,2");
         editor.apply();
 
         login.setOnClickListener(new View.OnClickListener() {
@@ -46,10 +46,13 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 Usuario usuario1 = new Usuario(usuario.getText().toString(), passwd.getText().toString());
                 String valor = prefs.getString(usuario1.getName(), " ");
+                Log.d("Prueba", valor);
                 String[] datos = valor.split(",");
+                Log.d("Prueba", datos[0]);
                 Usuario usuario2 = new Usuario(datos[0], datos[1]);
                 if (usuario1.equals(usuario2)) {
                     Intent pantalla2 = new Intent(Login.this, Main.class);
+                    pantalla2.putExtra("userId", Integer.parseInt(datos[2]));
                     startActivity(pantalla2);
                 } else {
                     Toast.makeText(Login.this, "El usuario o la contraseña son incorrectos.", Toast.LENGTH_SHORT).show();
@@ -66,23 +69,11 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    //TODO: Solucionar no va
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent i){
         super.onActivityResult(requestCode, resultCode, i);
-        Bundle b = i.getExtras();
-        if (b != null) {
-            Usuario user = new Usuario(b.getString("user"), b.getString("passwd"));
-            String valor = prefs.getString(user.getName(), "");
-            String[] datos = valor.split(",");
-            Usuario user2 = new Usuario(datos[0], datos[1]);
-            if (user.equals(user2)){
-                Toast.makeText(this, "El usuario ya existe.", Toast.LENGTH_SHORT).show();
-            } else {
-                Log.d("Prueba", user.toString());
-                editor.putString(user.getName(), user.getName() + "," + user.getPasswd());
-                editor.apply();
-            }
+        if (resultCode == RESULT_OK && requestCode == 2) {
+            Toast.makeText(this, "Usuario creado exitosamente.", Toast.LENGTH_SHORT).show();
         }
     }
 }

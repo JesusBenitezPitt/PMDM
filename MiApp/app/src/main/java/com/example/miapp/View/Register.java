@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.miapp.Model.Usuario;
 import com.example.miapp.R;
 
 public class Register extends AppCompatActivity {
@@ -44,11 +45,16 @@ public class Register extends AppCompatActivity {
     @Override
     public void finish(){
         Intent intent = new Intent();
-        intent.putExtra("user", usuario.getText().toString());
-        intent.putExtra("passwd", passwd.getText().toString());
-        Log.d("Prueba", usuario.getText().toString() + " " + passwd.getText().toString());
-        setResult(RESULT_OK, intent);
-        super.finish();
+        Usuario user = new Usuario(usuario.getText().toString(), passwd.getText().toString());
+        String valor = Login.prefs.getString(user.getName(), " ");
+        if (valor.equals(" ")) {
+            Login.editor.putString(user.getName(), user.getName() + "," + user.getPasswd());
+            Login.editor.apply();
+            setResult(RESULT_OK, intent);
+            super.finish();
+        } else {
+            Toast.makeText(this, "El usuario ya existe.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private boolean comprobarPasswd(String p1, String p2){

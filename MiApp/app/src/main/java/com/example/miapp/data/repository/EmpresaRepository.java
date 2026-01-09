@@ -1,0 +1,73 @@
+package com.example.miapp.data.repository;
+
+import android.content.Context;
+
+import androidx.room.Room;
+
+import com.example.miapp.data.dao.EmpresaDAO;
+import com.example.miapp.data.database.AppDatabase;
+import com.example.miapp.model.Empresa;
+
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class EmpresaRepository {
+
+    private final EmpresaDAO empresaDAO;
+    private final ExecutorService executor;
+
+    public EmpresaRepository(Context context) {
+        AppDatabase db = Room.databaseBuilder(context, AppDatabase.class, "secure-ops")
+                .fallbackToDestructiveMigration() // opcional, maneja cambios de versión
+                .build();
+        empresaDAO = db.empresaDAO();
+        executor = Executors.newSingleThreadExecutor(); // operaciones en background
+    }
+
+    public void insertarEmpresa(Empresa empresa, Callback<Long> callback) {
+        executor.execute(() -> {
+            long id = empresaDAO.insertar(empresa);
+            if (callback != null) callback.onComplete(id);
+        });
+    }
+
+    public void insertarEmpresas(List<Empresa> empresas, Callback<List<Long>> callback) {
+        executor.execute(() -> {
+            List<Long> ids = empresaDAO.insertarTodas(empresas);
+            if (callback != null) callback.onComplete(ids);
+        });
+    }
+
+    public void actualizarEmpresas(Empresa empresa, Callback<Integer> callback) {
+        executor.execute(() -> {
+            int rows = empresaDAO.actualizar(empresa);
+            if (callback != null) callback.onComplete(rows);
+        });
+    }
+
+    public void eliminarEmpresas(Empresa empresa, Callback<Integer> callback) {
+        executor.execute(() -> {
+            int rows = empresaDAO.eliminar(empresa);
+            if (callback != null) callback.onComplete(rows);
+        });
+    }
+
+    public void obtenerEmpresasID(int userId, Callback<List<Empresa>> callback) {
+        executor.execute(() -> {
+            List<Empresa> empresas = empresaDAO.obtenerEmpresas(userId);
+            if (callback != null) callback.onComplete(empresas);
+        });
+    }
+
+    public void obtenerTodasLasEmpresas(Callback<List<Empresa>> callback) {
+        executor.execute(() -> {
+            List<Empresa> empresas = empresaDAO.obtenerTodas();
+            if (callback != null) callback.onComplete(empresas);
+        });
+    }
+
+    public interface Callback<T> {
+        void onComplete(T result);
+    }
+}

@@ -14,19 +14,19 @@
         android:supportsRtl="true"
         android:theme="@style/MiTemaPersonalizado">
         <activity
-            android:name=".View.Anadir_Nuevo"
+            android:name=".ui.add.Anadir_Nuevo"
             android:exported="false" />
         <activity
-            android:name=".View.Register"
+            android:name=".ui.auth.Register"
             android:exported="false" />
         <activity
-            android:name=".View.Informacion"
+            android:name=".ui.info.Informacion"
             android:exported="false" />
         <activity
-            android:name=".Main"
+            android:name=".ui.main.Main"
             android:exported="false" />
         <activity
-            android:name=".View.Login"
+            android:name=".ui.auth.Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

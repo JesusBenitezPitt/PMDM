@@ -1,4 +1,4 @@
-package com.example.miapp.Model;
+package com.example.miapp.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -8,6 +8,7 @@ import java.util.Date;
 
 @Entity(tableName = "Empresas")
 public class Empresa {
+
     @PrimaryKey(autoGenerate = true)
     public int id;
 
@@ -35,7 +36,11 @@ public class Empresa {
     @ColumnInfo(name = "user_id")
     public int userId;
 
-    public Empresa(String nombre, String tipo, double rating, Date fecha, String descripcion, String paginaWeb, String numTelefono, int userId) {
+    @ColumnInfo(name = "imagen", typeAffinity = ColumnInfo.BLOB)
+    public byte[] imagen;
+
+    public Empresa(byte[] imagen, String nombre, String tipo, double rating, Date fecha, String descripcion, String paginaWeb, String numTelefono, int userId) {
+        this.imagen = imagen;
         this.nombre = nombre;
         this.tipo = tipo;
         this.rating = rating;
@@ -46,3 +51,4 @@ public class Empresa {
         this.userId = userId;
     }
 }
+

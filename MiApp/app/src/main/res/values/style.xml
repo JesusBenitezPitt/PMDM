@@ -35,7 +35,6 @@
         <item name="materialAlertDialogTitleTextStyle">@style/MiDialogoTitulo</item>
         <item name="materialAlertDialogBodyTextStyle">@style/MiDialogoMensaje</item>
 
-        <!-- ESTILOS DE BOTONES CORRECTOS EN MATERIAL3 -->
         <item name="buttonBarPositiveButtonStyle">@style/MiDialogoBotonPositivo</item>
         <item name="buttonBarNegativeButtonStyle">@style/MiDialogoBotonNegativo</item>
     </style>

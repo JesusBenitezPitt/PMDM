@@ -1,11 +1,11 @@
-package com.example.miapp.Model;
+package com.example.miapp.model;
 
 import android.net.Uri;
 
 import java.util.Date;
 
 public class Encapsulador {
-    private int imagen;
+    private byte[] imagen;
     private Uri imagenUri;
     private String empresa;
     private String tipo;
@@ -15,8 +15,9 @@ public class Encapsulador {
     private String pagina_web;
     private String num_telefono;
     private int userId;
+    private int empresaId;
 
-    public Encapsulador(int idImagen, String empresa, String tipo, double rating, Date fecha, String descripcion, String pagina_web, String num_telefono, int userId) {
+    public Encapsulador(byte[] idImagen, String empresa, String tipo, double rating, Date fecha, String descripcion, String pagina_web, String num_telefono, int userId) {
         this.imagen = idImagen;
         this.empresa = empresa;
         this.tipo = tipo;
@@ -28,7 +29,7 @@ public class Encapsulador {
         this.userId = userId;
     }
 
-    public Encapsulador (int idImagen, Empresa empresa){
+    public Encapsulador (byte[] idImagen, Empresa empresa){
         this.imagen = idImagen;
         this.empresa = empresa.nombre;
         this.tipo = empresa.tipo;
@@ -38,18 +39,10 @@ public class Encapsulador {
         this.pagina_web = empresa.paginaWeb;
         this.num_telefono = empresa.numTelefono;
         this.userId = empresa.userId;
+        this.empresaId = empresa.id;
     }
 
-    public Encapsulador(Uri imagenUri, String empresa, String tipo, double rating, Date fecha) {
-        this.imagenUri = imagenUri;
-        this.empresa = empresa;
-        this.tipo = tipo;
-        this.rating = rating;
-        this.fecha = fecha;
-        this.imagen = 0;
-    }
-
-    public int getImagenId() {
+    public byte[] getImagen() {
         return imagen;
     }
 
@@ -86,5 +79,8 @@ public class Encapsulador {
     }
 
     public int getUserId(){return userId; }
+
+    public int getEmpresaId() { return empresaId; }
+    public void setEmpresaId(int id) { this.empresaId = id; }
 
 }

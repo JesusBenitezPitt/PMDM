@@ -8,7 +8,7 @@
     android:theme="@style/MiTemaPersonalizado"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context=".Main">
+    tools:context=".ui.main.Main">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"

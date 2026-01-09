@@ -1,4 +1,4 @@
-package com.example.miapp.Controller;
+package com.example.miapp.data.database;
 
 import androidx.room.TypeConverter;
 import java.util.Date;

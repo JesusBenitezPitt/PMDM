@@ -25,7 +25,7 @@ import android.widget.Toast;
 
 import com.example.miapp.R;
 import com.example.miapp.data.repository.EmpresaRepository;
-import com.example.miapp.model.Adaptador;
+import com.example.miapp.ui.adapter.Adaptador;
 import com.example.miapp.model.Encapsulador;
 import com.example.miapp.model.Empresa;
 import com.example.miapp.ui.add.Anadir_Nuevo;

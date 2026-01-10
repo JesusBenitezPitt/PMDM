@@ -45,9 +45,17 @@ public class Login extends AppCompatActivity {
     private void initPrefs() {
         prefs = getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
+
+        Usuario u1 = new Usuario(Encriptacion.sha256("Usuario1"), new Usuario.Datos(Encriptacion.sha256("1234"), 1));
+        Usuario u2 = new Usuario(Encriptacion.sha256("Usuario2"), new Usuario.Datos(Encriptacion.sha256("4567"), 2));
+
+        Gson gson = new Gson();
+        String u1_json = gson.toJson(u1);
+        String u2_json = gson.toJson(u2);
+
         editor.clear();
-        editor.putString(Encriptacion.sha256("Usuario1"), Encriptacion.sha256("Usuario1") + "," + Encriptacion.sha256("1234") + ",1");
-        editor.putString(Encriptacion.sha256("Usuario2"), Encriptacion.sha256("Usuario2") + "," + Encriptacion.sha256("4567") + ",2");
+        editor.putString(Encriptacion.sha256("Usuario1"), u1_json);
+        editor.putString(Encriptacion.sha256("Usuario2"), u2_json);
         editor.apply();
     }
 
@@ -72,7 +80,7 @@ public class Login extends AppCompatActivity {
         if (valor != null) {
             Gson gson = new Gson();
             Usuario u = gson.fromJson(valor, Usuario.class);
-            if (u.getDatos().getPasswd().equals(passwd)) {
+            if (u.getDatos().getPasswd().equals(Encriptacion.sha256(passwd))) {
                 Intent mainIntent = new Intent(Login.this, Main.class);
                 mainIntent.putExtra("userId", u.getDatos().getId());
                 startActivity(mainIntent);

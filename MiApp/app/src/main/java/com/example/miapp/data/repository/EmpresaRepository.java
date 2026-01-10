@@ -19,10 +19,9 @@ public class EmpresaRepository {
 
     public EmpresaRepository(Context context) {
         AppDatabase db = Room.databaseBuilder(context, AppDatabase.class, "secure-ops")
-                .fallbackToDestructiveMigration() // opcional, maneja cambios de versión
                 .build();
         empresaDAO = db.empresaDAO();
-        executor = Executors.newSingleThreadExecutor(); // operaciones en background
+        executor = Executors.newSingleThreadExecutor();
     }
 
     public void insertarEmpresa(Empresa empresa, Callback<Long> callback) {

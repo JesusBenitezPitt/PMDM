@@ -11,8 +11,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.miapp.R;
+import com.example.miapp.model.Usuario;
 import com.example.miapp.ui.main.Main;
 import com.example.miapp.utils.Encriptacion;
+
+import com.google.gson.Gson;
 
 public class Login extends AppCompatActivity {
 
@@ -67,13 +70,21 @@ public class Login extends AppCompatActivity {
 
         String valor = prefs.getString(Encriptacion.sha256(usuario), null);
         if (valor != null) {
-            String[] datos = valor.split(",");
-            if (datos.length == 3 && datos[1].equals(Encriptacion.sha256(passwd))) {
+            Gson gson = new Gson();
+            Usuario u = gson.fromJson(valor, Usuario.class);
+            if (u.getDatos().getPasswd().equals(passwd)) {
                 Intent mainIntent = new Intent(Login.this, Main.class);
-                mainIntent.putExtra("userId", Integer.parseInt(datos[2]));
+                mainIntent.putExtra("userId", u.getDatos().getId());
                 startActivity(mainIntent);
                 return true;
             }
+//            String[] datos = valor.split(",");
+//            if (datos.length == 2 && datos[1].equals(Encriptacion.sha256(passwd))) {
+//                Intent mainIntent = new Intent(Login.this, Main.class);
+//                mainIntent.putExtra("userId", Integer.parseInt(datos[2]));
+//                startActivity(mainIntent);
+//                return true;
+//            }
         }
         return false;
     }

@@ -1,7 +1,6 @@
 package com.example.miapp.ui.auth;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
@@ -11,7 +10,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.miapp.R;
+import com.example.miapp.model.Usuario;
 import com.example.miapp.utils.Encriptacion;
+
+import com.google.gson.Gson;
 
 public class Register extends AppCompatActivity {
 
@@ -75,8 +77,12 @@ public class Register extends AppCompatActivity {
     private void registrarUsuario(String usuario, String passwd) {
         int nextId = prefs.getInt("nextUserId", 3);
 
-        String valor = Encriptacion.sha256(usuario) + "," + Encriptacion.sha256(passwd) + "," + nextId;
-        editor.putString(Encriptacion.sha256(usuario), valor);
+        Usuario u = new Usuario(Encriptacion.sha256(usuario), new Usuario.Datos(Encriptacion.sha256(passwd), nextId));
+
+        Gson gson = new Gson();
+        String datos_json = gson.toJson(u);
+
+        editor.putString(Encriptacion.sha256(usuario), datos_json);
         editor.putInt("nextUserId", nextId + 1);
         editor.apply();
     }

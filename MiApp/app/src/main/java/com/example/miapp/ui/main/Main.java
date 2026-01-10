@@ -52,6 +52,7 @@ public class Main extends AppCompatActivity {
     private Toolbar toolBar;
     private EmpresaRepository empresaRepo;
     private int posicionSeleccionada = -1;
+    private int userId;
     private SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
 
     private Date parsearFecha(String fechaString) {
@@ -74,7 +75,7 @@ public class Main extends AppCompatActivity {
 
         empresaRepo = new EmpresaRepository(getApplicationContext());
 
-        int userId = getIntent().getIntExtra("userId", -1);
+        userId = getIntent().getIntExtra("userId", -1);
 
         adaptador = new Adaptador(this, R.layout.entrada, datos) {
             @Override
@@ -256,8 +257,7 @@ public class Main extends AppCompatActivity {
             imagen.compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] img = stream.toByteArray();
 
-            // TODO: Que se ponga el id de quien añade la empresa.
-            Empresa nuevaEmpresa = new Empresa(img, nombre, tipo, rating, fecha, descripcion, pagina, num, 1);
+            Empresa nuevaEmpresa = new Empresa(img, nombre, tipo, rating, fecha, descripcion, pagina, num, userId);
             empresaRepo.insertarEmpresa(nuevaEmpresa, id -> runOnUiThread(() -> {
                 Encapsulador enc = new Encapsulador(img, nuevaEmpresa);
                 enc.setEmpresaId(id.intValue());

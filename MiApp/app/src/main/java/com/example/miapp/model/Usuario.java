@@ -2,32 +2,39 @@ package com.example.miapp.model;
 
 public class Usuario {
     private String name;
-    private String passwd;
-    private int Id;
+    private Datos datos;
 
-    public Usuario(String name, String passwd, int Id) {
+    public Usuario(String name, Datos datos) {
         this.name = name;
-        this.passwd = passwd;
-        this.Id = Id;
-    }
-
-    public Usuario(String name, String passwd) {
-        this.name = name;
-        this.passwd = passwd;
+        this.datos = datos;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getPasswd() {
-        return passwd;
+    public Datos getDatos() {
+        return datos;
     }
 
     @Override
     public boolean equals(Object o) {
         Usuario usuario = (Usuario) o;
-        return name.equals(usuario.name) && passwd.equals(usuario.passwd);
+        return datos.id == usuario.getDatos().getId();
+    }
+
+    public static class Datos {
+        private String passwd;
+        private int id;
+
+        public Datos(String passwd, int id){
+            this.passwd = passwd;
+            this.id = id;
+        }
+
+        public String getPasswd() { return passwd; }
+
+        public int getId() { return id; }
     }
 
 }

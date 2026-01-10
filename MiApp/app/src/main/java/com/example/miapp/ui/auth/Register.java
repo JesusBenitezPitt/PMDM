@@ -40,7 +40,7 @@ public class Register extends AppCompatActivity {
     }
 
     private void initPrefs() {
-        prefs = getPreferences(Context.MODE_PRIVATE);
+        prefs = Login.prefs;
         editor = prefs.edit();
     }
 

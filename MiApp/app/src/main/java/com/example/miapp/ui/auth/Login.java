@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -23,7 +24,7 @@ public class Login extends AppCompatActivity {
 
     private EditText usuarioField, passwdField;
     private Button loginButton, registrarButton;
-    private SharedPreferences prefs;
+    protected static SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +78,11 @@ public class Login extends AppCompatActivity {
         String passwd = passwdField.getText().toString();
 
         String valor = prefs.getString(Encriptacion.sha256(usuario), null);
+        Log.d("Prueba", " " + valor);
         if (valor != null) {
             Gson gson = new Gson();
             Usuario u = gson.fromJson(valor, Usuario.class);
+            Log.d("Prueba", u.getDatos().getPasswd() + "    /     " + passwd);
             if (u.getDatos().getPasswd().equals(Encriptacion.sha256(passwd))) {
                 Intent mainIntent = new Intent(Login.this, Main.class);
                 mainIntent.putExtra("userId", u.getDatos().getId());

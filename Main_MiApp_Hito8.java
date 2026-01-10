@@ -1,3 +1,5 @@
+// IMPLEMENTAR PARA EL HITO 8, FALTA QUE EN MODIFICAR SE PUEDA CAMBIAR IMAGEN
+
 package com.example.miapp.ui.main;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +32,6 @@ import com.example.miapp.model.Encapsulador;
 import com.example.miapp.model.Empresa;
 import com.example.miapp.ui.add.Anadir_Nuevo;
 import com.example.miapp.ui.info.Informacion;
-import com.example.miapp.utils.ImagenUtil;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -110,7 +111,8 @@ public class Main extends AppCompatActivity {
                         if (item.getImagenUri() != null) {
                             imagen_entrada.setImageURI(item.getImagenUri());
                         } else {
-                            imagen_entrada.setImageDrawable(ImagenUtil.bytesToDrawable(Main.this, item.getImagen()));
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(item.getImagen(), 0, item.getImagen().length);
+                            imagen_entrada.setImageBitmap(bitmap);
                         }
                     } catch (Exception e) {
                         imagen_entrada.setImageResource(R.mipmap.ic_launcher);
@@ -244,6 +246,7 @@ public class Main extends AppCompatActivity {
         if (b == null) return;
 
         if (requestCode == REQUEST_CODE_ANADIR) {
+            Bitmap imagen = b.getParcelable("imagenBitmap");
             String nombre = b.getString("nombre_empresa");
             String tipo = b.getString("tipo_auditoria");
             Date fecha = parsearFecha(b.getString("fecha"));
@@ -252,8 +255,9 @@ public class Main extends AppCompatActivity {
             String pagina = b.getString("pagina");
             String num = b.getString("num");
 
-            int imagen = R.mipmap.ic_launcher;
-            byte[] img = ImagenUtil.drawableToBytes(this, imagen);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            imagen.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] img = stream.toByteArray();
 
             Empresa nuevaEmpresa = new Empresa(img, nombre, tipo, rating, fecha, descripcion, pagina, num, userId);
             empresaRepo.insertarEmpresa(nuevaEmpresa, id -> runOnUiThread(() -> {

@@ -86,13 +86,6 @@ public class Login extends AppCompatActivity {
                 startActivity(mainIntent);
                 return true;
             }
-//            String[] datos = valor.split(",");
-//            if (datos.length == 2 && datos[1].equals(Encriptacion.sha256(passwd))) {
-//                Intent mainIntent = new Intent(Login.this, Main.class);
-//                mainIntent.putExtra("userId", Integer.parseInt(datos[2]));
-//                startActivity(mainIntent);
-//                return true;
-//            }
         }
         return false;
     }

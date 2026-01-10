@@ -24,7 +24,7 @@ public class Login extends AppCompatActivity {
 
     private EditText usuarioField, passwdField;
     private Button loginButton, registrarButton;
-    protected static SharedPreferences prefs;
+    protected SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,20 +44,22 @@ public class Login extends AppCompatActivity {
     }
 
     private void initPrefs() {
-        prefs = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
+        prefs = getSharedPreferences("usuarios", Context.MODE_PRIVATE);
 
-        Usuario u1 = new Usuario(Encriptacion.sha256("Usuario1"), new Usuario.Datos(Encriptacion.sha256("1234"), 1));
-        Usuario u2 = new Usuario(Encriptacion.sha256("Usuario2"), new Usuario.Datos(Encriptacion.sha256("4567"), 2));
+        if (!prefs.contains("inicializado")) {
+            SharedPreferences.Editor editor = prefs.edit();
 
-        Gson gson = new Gson();
-        String u1_json = gson.toJson(u1);
-        String u2_json = gson.toJson(u2);
+            Usuario u1 = new Usuario(Encriptacion.sha256("Usuario1"), new Usuario.Datos(Encriptacion.sha256("1234"), 1));
+            Usuario u2 = new Usuario(Encriptacion.sha256("Usuario2"), new Usuario.Datos(Encriptacion.sha256("4567"), 2));
 
-        editor.clear();
-        editor.putString(Encriptacion.sha256("Usuario1"), u1_json);
-        editor.putString(Encriptacion.sha256("Usuario2"), u2_json);
-        editor.apply();
+            Gson gson = new Gson();
+            String u1_json = gson.toJson(u1);
+            String u2_json = gson.toJson(u2);
+
+            editor.putString(Encriptacion.sha256("Usuario1"), u1_json);
+            editor.putString(Encriptacion.sha256("Usuario2"), u2_json);
+            editor.apply();
+        }
     }
 
     private void initListeners() {

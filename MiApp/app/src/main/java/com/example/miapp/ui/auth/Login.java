@@ -51,13 +51,17 @@ public class Login extends AppCompatActivity {
 
             Usuario u1 = new Usuario(Encriptacion.sha256("Usuario1"), new Usuario.Datos(Encriptacion.sha256("1234"), 1));
             Usuario u2 = new Usuario(Encriptacion.sha256("Usuario2"), new Usuario.Datos(Encriptacion.sha256("4567"), 2));
+            Usuario u3 = new Usuario(Encriptacion.sha256("Jesus"), new Usuario.Datos(Encriptacion.sha256("1234"), 3));
 
             Gson gson = new Gson();
             String u1_json = gson.toJson(u1);
             String u2_json = gson.toJson(u2);
+            String u3_json = gson.toJson(u3);
 
             editor.putString(Encriptacion.sha256("Usuario1"), u1_json);
             editor.putString(Encriptacion.sha256("Usuario2"), u2_json);
+            editor.putString(Encriptacion.sha256("Jesus"), u3_json);
+            editor.putBoolean("inicializado", true);
             editor.apply();
         }
     }

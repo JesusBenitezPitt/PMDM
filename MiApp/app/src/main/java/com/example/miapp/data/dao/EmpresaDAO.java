@@ -6,7 +6,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 import androidx.room.Delete;
 
-import com.example.miapp.model.Empresa;
+import com.example.miapp.model.EmpresaEntity;
 
 import java.util.List;
 
@@ -14,21 +14,21 @@ import java.util.List;
 public interface EmpresaDAO {
 
     @Insert
-    long insertar(Empresa empresa);
+    long insertar(EmpresaEntity empresa);
 
     @Insert
-    List<Long> insertarTodas(List<Empresa> empresas);
+    List<Long> insertarTodas(List<EmpresaEntity> empresas);
 
     @Update
-    int actualizar(Empresa empresa);
+    int actualizar(EmpresaEntity empresa);
 
     @Delete
-    int eliminar(Empresa empresa);
+    int eliminar(EmpresaEntity empresa);
 
     @Query("SELECT * FROM empresas WHERE user_id = :userId")
-    List<Empresa> obtenerEmpresas(int userId);
+    List<EmpresaEntity> obtenerEmpresas(int userId);
 
     @Query("SELECT * FROM empresas")
-    List<Empresa> obtenerTodas();
+    List<EmpresaEntity> obtenerTodas();
 
 }

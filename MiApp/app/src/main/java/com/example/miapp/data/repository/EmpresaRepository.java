@@ -6,7 +6,7 @@ import androidx.room.Room;
 
 import com.example.miapp.data.dao.EmpresaDAO;
 import com.example.miapp.data.database.AppDatabase;
-import com.example.miapp.model.Empresa;
+import com.example.miapp.model.EmpresaEntity;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -24,44 +24,44 @@ public class EmpresaRepository {
         executor = Executors.newSingleThreadExecutor();
     }
 
-    public void insertarEmpresa(Empresa empresa, Callback<Long> callback) {
+    public void insertarEmpresa(EmpresaEntity empresa, Callback<Long> callback) {
         executor.execute(() -> {
             long id = empresaDAO.insertar(empresa);
             if (callback != null) callback.onComplete(id);
         });
     }
 
-    public void insertarEmpresas(List<Empresa> empresas, Callback<List<Long>> callback) {
+    public void insertarEmpresas(List<EmpresaEntity> empresas, Callback<List<Long>> callback) {
         executor.execute(() -> {
             List<Long> ids = empresaDAO.insertarTodas(empresas);
             if (callback != null) callback.onComplete(ids);
         });
     }
 
-    public void actualizarEmpresas(Empresa empresa, Callback<Integer> callback) {
+    public void actualizarEmpresas(EmpresaEntity empresa, Callback<Integer> callback) {
         executor.execute(() -> {
             int rows = empresaDAO.actualizar(empresa);
             if (callback != null) callback.onComplete(rows);
         });
     }
 
-    public void eliminarEmpresas(Empresa empresa, Callback<Integer> callback) {
+    public void eliminarEmpresas(EmpresaEntity empresa, Callback<Integer> callback) {
         executor.execute(() -> {
             int rows = empresaDAO.eliminar(empresa);
             if (callback != null) callback.onComplete(rows);
         });
     }
 
-    public void obtenerEmpresasID(int userId, Callback<List<Empresa>> callback) {
+    public void obtenerEmpresasID(int userId, Callback<List<EmpresaEntity>> callback) {
         executor.execute(() -> {
-            List<Empresa> empresas = empresaDAO.obtenerEmpresas(userId);
+            List<EmpresaEntity> empresas = empresaDAO.obtenerEmpresas(userId);
             if (callback != null) callback.onComplete(empresas);
         });
     }
 
-    public void obtenerTodasLasEmpresas(Callback<List<Empresa>> callback) {
+    public void obtenerTodasLasEmpresas(Callback<List<EmpresaEntity>> callback) {
         executor.execute(() -> {
-            List<Empresa> empresas = empresaDAO.obtenerTodas();
+            List<EmpresaEntity> empresas = empresaDAO.obtenerTodas();
             if (callback != null) callback.onComplete(empresas);
         });
     }

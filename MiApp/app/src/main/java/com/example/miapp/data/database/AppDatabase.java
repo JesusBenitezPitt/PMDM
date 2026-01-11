@@ -5,9 +5,9 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import com.example.miapp.data.dao.EmpresaDAO;
-import com.example.miapp.model.Empresa;
+import com.example.miapp.model.EmpresaEntity;
 
-@Database(entities = {Empresa.class}, version = 2)
+@Database(entities = {EmpresaEntity.class}, version = 2)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract EmpresaDAO empresaDAO();

@@ -5,15 +5,14 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RatingBar;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.miapp.R;
+import com.example.miapp.model.Empresa;
 
 import java.util.Calendar;
 
@@ -64,14 +63,16 @@ public class Informacion extends AppCompatActivity {
     private void populateFields() {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String modo = extras.getString("modo", "");
+            Empresa e = (Empresa) extras.getSerializable("empresa");
             posicion = extras.getInt("posicion", -1);
-            nombreField.setText(extras.getString("nombre_empresa"));
-            tipoField.setText(extras.getString("tipo_auditoria"));
-            ratingField.setRating((float) extras.getDouble("rating", 0));
-            descriptionField.setText(extras.getString("descripcion"));
-            paginaField.setText(extras.getString("pagina"));
-            numField.setText(extras.getString("num"));
+            if (e != null) {
+                nombreField.setText(e.getNombre());
+                tipoField.setText(e.getTipo());
+                ratingField.setRating((float) e.getRating());
+                descriptionField.setText(e.getDescripcion());
+                paginaField.setText(e.getPagina_web());
+                numField.setText(e.getNum_telefono());
+            }
         }
     }
 

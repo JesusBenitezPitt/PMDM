@@ -75,7 +75,7 @@ public class Register extends AppCompatActivity {
     }
 
     private void registrarUsuario(String usuario, String passwd) {
-        int nextId = prefs.getInt("nextUserId", 3);
+        int nextId = prefs.getInt("nextUserId", 4);
 
         Usuario u = new Usuario(Encriptacion.sha256(usuario), new Usuario.Datos(Encriptacion.sha256(passwd), nextId));
 

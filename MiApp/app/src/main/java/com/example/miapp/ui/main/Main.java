@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -25,16 +23,15 @@ import android.widget.Toast;
 
 import com.example.miapp.R;
 import com.example.miapp.data.repository.EmpresaRepository;
-import com.example.miapp.ui.adapter.Adaptador;
-import com.example.miapp.model.Encapsulador;
 import com.example.miapp.model.Empresa;
+import com.example.miapp.model.EmpresaEntity;
+import com.example.miapp.ui.adapter.Adaptador;
 import com.example.miapp.ui.add.Anadir_Nuevo;
 import com.example.miapp.ui.info.Informacion;
 import com.example.miapp.utils.ImagenUtil;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,7 +45,7 @@ public class Main extends AppCompatActivity {
     private static final int REQUEST_CODE_CONSULTAR = 3;
 
     private ListView lista;
-    private ArrayList<Encapsulador> datos = new ArrayList<>();
+    private ArrayList<Empresa> datos = new ArrayList<>();
     private Adaptador adaptador;
     private Toolbar toolBar;
     private EmpresaRepository empresaRepo;
@@ -82,7 +79,7 @@ public class Main extends AppCompatActivity {
             @Override
             public void onEntrada(Object entrada, View view, int position) {
                 if (entrada != null) {
-                    Encapsulador item = (Encapsulador) entrada;
+                    Empresa item = (Empresa) entrada;
                     LinearLayout layoutMain = view.findViewById(R.id.layoutMain);
 
                     if (posicionSeleccionada == -1) {
@@ -103,7 +100,7 @@ public class Main extends AppCompatActivity {
                         return false;
                     });
 
-                    empresa_texto.setText(item.getEmpresa());
+                    empresa_texto.setText(item.getNombre());
                     tipo_texto.setText(item.getTipo());
 
                     try {
@@ -132,26 +129,21 @@ public class Main extends AppCompatActivity {
     private void cargarDatos(int userId) {
         empresaRepo.obtenerEmpresasID(userId, empresas -> runOnUiThread(() -> {
             datos.clear();
-            for (Empresa e : empresas) {
-                datos.add(new Encapsulador(e.imagen, e));
+            for (EmpresaEntity e : empresas) {
+                datos.add(new Empresa(e.imagen, e));
             }
             adaptador.notifyDataSetChanged();
+            posicionSeleccionada = -1;
         }));
     }
 
     private void abrirInformacion(String modo) {
         if (posicionSeleccionada == -1) return;
-        Encapsulador i = datos.get(posicionSeleccionada);
+        Empresa e = datos.get(posicionSeleccionada);
         Intent intent = new Intent(Main.this, Informacion.class);
         intent.putExtra("modo", modo);
         intent.putExtra("posicion", posicionSeleccionada);
-        intent.putExtra("nombre_empresa", i.getEmpresa());
-        intent.putExtra("tipo_auditoria", i.getTipo());
-        intent.putExtra("fecha", i.getFecha().toString());
-        intent.putExtra("descripcion", i.getDescripcion());
-        intent.putExtra("pagina", i.getPagina_web());
-        intent.putExtra("num", i.getNum_telefono());
-        intent.putExtra("rating", i.getRating());
+        intent.putExtra("empresa", e);
 
         if ("modificar".equals(modo)) {
             startActivityForResult(intent, REQUEST_CODE_MODIFICAR);
@@ -195,25 +187,18 @@ public class Main extends AppCompatActivity {
             View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.custom_toast));
             TextView text = layout.findViewById(R.id.toast_text);
 
+            Empresa empresaAEliminar = datos.get(posicionSeleccionada);
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(Main.this, R.style.MiEstiloDialogo);
             builder.setTitle("Eliminar registro");
-            builder.setMessage("Estas seguro de que quieres eliminar el registro de la empresa " + datos.get(posicionSeleccionada).getEmpresa());
+            builder.setMessage("Estas seguro de que quieres eliminar el registro de la empresa " + empresaAEliminar.getNombre());
             builder.setPositiveButton("Si", (dialog, which) -> {
-                Encapsulador eliminarItem = datos.get(posicionSeleccionada);
-                datos.remove(eliminarItem);
-                empresaRepo.eliminarEmpresas(new Empresa(
-                        eliminarItem.getImagen(),
-                        eliminarItem.getEmpresa(),
-                        eliminarItem.getTipo(),
-                        eliminarItem.getRating(),
-                        eliminarItem.getFecha(),
-                        eliminarItem.getDescripcion(),
-                        eliminarItem.getPagina_web(),
-                        eliminarItem.getNum_telefono(),
-                        eliminarItem.getUserId()
-                ) {{
-                    id = eliminarItem.getEmpresaId();
-                }}, rows -> runOnUiThread(() -> adaptador.notifyDataSetChanged()));
+                EmpresaEntity entity = new EmpresaEntity();
+                entity.id = empresaAEliminar.getEmpresaId();
+
+                empresaRepo.eliminarEmpresas(entity, rows -> {
+                    cargarDatos(userId);
+                    runOnUiThread(() -> Toast.makeText(this, "Registro eliminado", Toast.LENGTH_SHORT).show());
+                });
 
                 text.setText("Registro eliminado");
                 Toast toast = new Toast(Main.this);
@@ -255,20 +240,17 @@ public class Main extends AppCompatActivity {
             int imagen = R.mipmap.ic_launcher;
             byte[] img = ImagenUtil.drawableToBytes(this, imagen);
 
-            Empresa nuevaEmpresa = new Empresa(img, nombre, tipo, rating, fecha, descripcion, pagina, num, userId);
+            EmpresaEntity nuevaEmpresa = new EmpresaEntity(img, nombre, tipo, rating, fecha, descripcion, pagina, num, userId);
             empresaRepo.insertarEmpresa(nuevaEmpresa, id -> runOnUiThread(() -> {
-                Encapsulador enc = new Encapsulador(img, nuevaEmpresa);
-                enc.setEmpresaId(id.intValue());
-                datos.add(enc);
-                adaptador.notifyDataSetChanged();
+                cargarDatos(userId);
             }));
         }
 
         if (requestCode == REQUEST_CODE_MODIFICAR) {
             int pos = b.getInt("posicion");
-            Encapsulador empresaOriginal = datos.get(pos);
+            Empresa empresaOriginal = datos.get(pos);
 
-            Empresa empresaActualizada = new Empresa(
+            EmpresaEntity empresaActualizada = new EmpresaEntity(
                     empresaOriginal.getImagen(),
                     b.getString("nombre_empresa"),
                     b.getString("tipo_auditoria"),
@@ -281,16 +263,10 @@ public class Main extends AppCompatActivity {
             );
             empresaActualizada.id = empresaOriginal.getEmpresaId();
 
-            datos.set(pos, new Encapsulador(
-                    empresaOriginal.getImagen(),
-                    empresaActualizada
-            ));
-
-            adaptador.notifyDataSetChanged();
-
-            empresaRepo.actualizarEmpresas(empresaActualizada, rows -> runOnUiThread(() ->
-                    Toast.makeText(this, "Registro actualizado", Toast.LENGTH_SHORT).show()
-            ));
+            empresaRepo.actualizarEmpresas(empresaActualizada, rows -> runOnUiThread(() -> {
+                cargarDatos(userId);
+                Toast.makeText(this, "Registro actualizado", Toast.LENGTH_SHORT).show();
+            }));
         }
     }
 }

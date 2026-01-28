@@ -18,6 +18,8 @@ import com.example.miapp.utils.Encriptacion;
 
 import com.google.gson.Gson;
 
+import android.media.MediaPlayer;
+
 public class Login extends AppCompatActivity {
 
     private static final int REQUEST_REGISTRAR = 2;
@@ -25,15 +27,37 @@ public class Login extends AppCompatActivity {
     private EditText usuarioField, passwdField;
     private Button loginButton, registrarButton;
     protected SharedPreferences prefs;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        startMusic();
         initViews();
         initPrefs();
         initListeners();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopMusic();
+    }
+
+    private void startMusic() {
+        mediaPlayer = MediaPlayer.create(this, R.raw.musica);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+    }
+
+    private void stopMusic() {
+        if(mediaPlayer.isPlaying() || mediaPlayer != null){
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 
     private void initViews() {
@@ -69,7 +93,10 @@ public class Login extends AppCompatActivity {
     private void initListeners() {
 
         loginButton.setOnClickListener(v -> {
-            if (intentarLogin()) return;
+            if (intentarLogin()) {
+                stopMusic();
+                return;
+            }
             Toast.makeText(Login.this, "El usuario o la contraseña son incorrectos.", Toast.LENGTH_SHORT).show();
         });
 

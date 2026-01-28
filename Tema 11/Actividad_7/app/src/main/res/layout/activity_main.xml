@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="GRABANDO VIDEO"
+        android:paddingBottom="10dp"
+        />
+
+    <VideoView
+        android:id="@+id/surfaceView"
+        android:layout_width="640px"
+        android:layout_height="520px"
+        android:layout_gravity="center"
+        />
+
+    <LinearLayout
+        android:padding="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        >
+
+        <Button
+            android:id="@+id/boton_grabar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Grabar"/>
+
+        <Button
+            android:id="@+id/boton_parar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Parar"/>
+
+        <Button
+            android:id="@+id/boton_reproducir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reproducir"/>
+
+    </LinearLayout>
+
+</LinearLayout>

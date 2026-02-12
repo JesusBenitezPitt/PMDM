@@ -3,6 +3,7 @@ package com.example.miapp.model;
 import android.net.Uri;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 
 public class Empresa implements Serializable {
@@ -20,6 +21,17 @@ public class Empresa implements Serializable {
 
     public Empresa(byte[] idImagen, String nombre, String tipo, double rating, Date fecha, String descripcion, String pagina_web, String num_telefono, int userId) {
         this.imagen = idImagen;
+        this.nombre = nombre;
+        this.tipo = tipo;
+        this.rating = rating;
+        this.fecha = fecha;
+        this.descripcion = descripcion;
+        this.pagina_web = pagina_web;
+        this.num_telefono = num_telefono;
+        this.userId = userId;
+    }
+
+    public Empresa( String nombre, String tipo, double rating, Date fecha, String descripcion, String pagina_web, String num_telefono, int userId) {
         this.nombre = nombre;
         this.tipo = tipo;
         this.rating = rating;
@@ -84,4 +96,20 @@ public class Empresa implements Serializable {
     public int getEmpresaId() { return empresaId; }
     public void setEmpresaId(int id) { this.empresaId = id; }
 
+    @Override
+    public String toString() {
+        return "Empresa{" +
+                "imagen=" + Arrays.toString(imagen) +
+                ", imagenUri=" + imagenUri +
+                ", nombre='" + nombre + '\'' +
+                ", tipo='" + tipo + '\'' +
+                ", rating=" + rating +
+                ", fecha=" + fecha +
+                ", descripcion='" + descripcion + '\'' +
+                ", pagina_web='" + pagina_web + '\'' +
+                ", num_telefono='" + num_telefono + '\'' +
+                ", userId=" + userId +
+                ", empresaId=" + empresaId +
+                '}';
+    }
 }

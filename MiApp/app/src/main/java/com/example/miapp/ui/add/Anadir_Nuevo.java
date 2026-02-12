@@ -22,10 +22,15 @@ import java.util.Calendar;
 
 public class Anadir_Nuevo extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_GALERIA = 100;
+
     private DatePickerDialog datePickerDialog;
     private EditText nombre_empresa, tipo_auditoria, descripcion, pagina, num;
     private Button boton_fecha, boton_añadir, boton_cancel;
     private RatingBar rating_seguridad;
+    private FrameLayout container_preview;
+    private ImageView imagen_preview, placeholder;
+    private Bitmap bitmapReducido;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,9 @@ public class Anadir_Nuevo extends AppCompatActivity {
         rating_seguridad = findViewById(R.id.rating_seguridad);
         boton_añadir = findViewById(R.id.añadir);
         boton_cancel = findViewById(R.id.cancelar);
+        container_preview = findViewById(R.id.container_preview);
+        imagen_preview = findViewById(R.id.imagen_preview);
+        placeholder = findViewById(R.id.icon_placeholder);
 
         boton_fecha.setText(fechaActual());
     }
@@ -79,6 +87,35 @@ public class Anadir_Nuevo extends AppCompatActivity {
         });
 
         boton_cancel.setOnClickListener(v -> finish());
+
+        container_preview.setOnClickListener(v -> abrirGaleria());
+    }
+
+    private void abrirGaleria() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, REQUEST_CODE_GALERIA);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_GALERIA) {
+            cargarImagen(data.getData());
+        }
+    }
+
+    private void cargarImagen(Uri imagenUri) {
+        if (imagenUri == null) return;
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagenUri);
+            bitmapReducido = Bitmap.createScaledBitmap(bitmap, 100, 100, true);
+            imagen_preview.setImageBitmap(bitmapReducido);
+            placeholder.setVisibility(FrameLayout.GONE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error al cargar imagen", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private String fechaActual() {
@@ -102,6 +139,7 @@ public class Anadir_Nuevo extends AppCompatActivity {
     public void finish() {
         Intent intent = new Intent();
         if (!hayCamposInvalidos()) {
+            intent.putExtra("imagenBitmap", bitmapReducido);
             intent.putExtra("nombre_empresa", nombre_empresa.getText().toString());
             intent.putExtra("tipo_auditoria", tipo_auditoria.getText().toString());
             intent.putExtra("fecha", boton_fecha.getText().toString());

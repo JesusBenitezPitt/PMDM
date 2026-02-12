@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -23,15 +25,16 @@ import android.widget.Toast;
 
 import com.example.miapp.R;
 import com.example.miapp.data.repository.EmpresaRepository;
-import com.example.miapp.model.Empresa;
 import com.example.miapp.model.EmpresaEntity;
 import com.example.miapp.ui.adapter.Adaptador;
+import com.example.miapp.model.Empresa;
+import com.example.miapp.model.Empresa;
 import com.example.miapp.ui.add.Anadir_Nuevo;
 import com.example.miapp.ui.info.Informacion;
-import com.example.miapp.utils.ImagenUtil;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -107,7 +110,8 @@ public class Main extends AppCompatActivity {
                         if (item.getImagenUri() != null) {
                             imagen_entrada.setImageURI(item.getImagenUri());
                         } else {
-                            imagen_entrada.setImageDrawable(ImagenUtil.bytesToDrawable(Main.this, item.getImagen()));
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(item.getImagen(), 0, item.getImagen().length);
+                            imagen_entrada.setImageBitmap(bitmap);
                         }
                     } catch (Exception e) {
                         imagen_entrada.setImageResource(R.mipmap.ic_launcher);
@@ -133,17 +137,16 @@ public class Main extends AppCompatActivity {
                 datos.add(new Empresa(e.imagen, e));
             }
             adaptador.notifyDataSetChanged();
-            posicionSeleccionada = -1;
         }));
     }
 
     private void abrirInformacion(String modo) {
         if (posicionSeleccionada == -1) return;
-        Empresa e = datos.get(posicionSeleccionada);
+        Empresa i = datos.get(posicionSeleccionada);
         Intent intent = new Intent(Main.this, Informacion.class);
         intent.putExtra("modo", modo);
         intent.putExtra("posicion", posicionSeleccionada);
-        intent.putExtra("empresa", e);
+        intent.putExtra("empresa", i);
 
         if ("modificar".equals(modo)) {
             startActivityForResult(intent, REQUEST_CODE_MODIFICAR);
@@ -187,18 +190,25 @@ public class Main extends AppCompatActivity {
             View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.custom_toast));
             TextView text = layout.findViewById(R.id.toast_text);
 
-            Empresa empresaAEliminar = datos.get(posicionSeleccionada);
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(Main.this, R.style.MiEstiloDialogo);
             builder.setTitle("Eliminar registro");
-            builder.setMessage("Estas seguro de que quieres eliminar el registro de la empresa " + empresaAEliminar.getNombre());
+            builder.setMessage("Estas seguro de que quieres eliminar el registro de la empresa " + datos.get(posicionSeleccionada).getNombre());
             builder.setPositiveButton("Si", (dialog, which) -> {
-                EmpresaEntity entity = new EmpresaEntity();
-                entity.id = empresaAEliminar.getEmpresaId();
-
-                empresaRepo.eliminarEmpresas(entity, rows -> {
-                    cargarDatos(userId);
-                    runOnUiThread(() -> Toast.makeText(this, "Registro eliminado", Toast.LENGTH_SHORT).show());
-                });
+                Empresa eliminarItem = datos.get(posicionSeleccionada);
+                datos.remove(eliminarItem);
+                empresaRepo.eliminarEmpresas(new EmpresaEntity(
+                        eliminarItem.getImagen(),
+                        eliminarItem.getNombre(),
+                        eliminarItem.getTipo(),
+                        eliminarItem.getRating(),
+                        eliminarItem.getFecha(),
+                        eliminarItem.getDescripcion(),
+                        eliminarItem.getPagina_web(),
+                        eliminarItem.getNum_telefono(),
+                        eliminarItem.getUserId()
+                ) {{
+                    id = eliminarItem.getEmpresaId();
+                }}, rows -> runOnUiThread(() -> adaptador.notifyDataSetChanged()));
 
                 text.setText("Registro eliminado");
                 Toast toast = new Toast(Main.this);
@@ -229,6 +239,7 @@ public class Main extends AppCompatActivity {
         if (b == null) return;
 
         if (requestCode == REQUEST_CODE_ANADIR) {
+            Bitmap imagen = b.getParcelable("imagenBitmap");
             String nombre = b.getString("nombre_empresa");
             String tipo = b.getString("tipo_auditoria");
             Date fecha = parsearFecha(b.getString("fecha"));
@@ -237,12 +248,16 @@ public class Main extends AppCompatActivity {
             String pagina = b.getString("pagina");
             String num = b.getString("num");
 
-            int imagen = R.mipmap.ic_launcher;
-            byte[] img = ImagenUtil.drawableToBytes(this, imagen);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            imagen.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] img = stream.toByteArray();
 
             EmpresaEntity nuevaEmpresa = new EmpresaEntity(img, nombre, tipo, rating, fecha, descripcion, pagina, num, userId);
             empresaRepo.insertarEmpresa(nuevaEmpresa, id -> runOnUiThread(() -> {
-                cargarDatos(userId);
+                Empresa enc = new Empresa(img, nuevaEmpresa);
+                enc.setEmpresaId(id.intValue());
+                datos.add(enc);
+                adaptador.notifyDataSetChanged();
             }));
         }
 
@@ -263,10 +278,16 @@ public class Main extends AppCompatActivity {
             );
             empresaActualizada.id = empresaOriginal.getEmpresaId();
 
-            empresaRepo.actualizarEmpresas(empresaActualizada, rows -> runOnUiThread(() -> {
-                cargarDatos(userId);
-                Toast.makeText(this, "Registro actualizado", Toast.LENGTH_SHORT).show();
-            }));
+            datos.set(pos, new Empresa(
+                    empresaOriginal.getImagen(),
+                    empresaActualizada
+            ));
+
+            adaptador.notifyDataSetChanged();
+
+            empresaRepo.actualizarEmpresas(empresaActualizada, rows -> runOnUiThread(() ->
+                    Toast.makeText(this, "Registro actualizado", Toast.LENGTH_SHORT).show()
+            ));
         }
     }
 }

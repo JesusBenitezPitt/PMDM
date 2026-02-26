@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Eje X"
+        />
+
+    <TextView
+        android:id="@+id/textViewAX"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aceleracion X"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Eje Y"
+        />
+
+    <TextView
+        android:id="@+id/textViewAY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aceleracion Y"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Eje Z"
+        />
+
+    <TextView
+        android:id="@+id/textViewAZ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aceleracion Z"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MODULO DE ACELERACION"
+        />
+
+    <TextView
+        android:id="@+id/textViewA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aceleracion"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ACELERACION MAXIMA"
+        />
+
+    <TextView
+        android:id="@+id/textViewAmax"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aceleracion_max"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GRAVEDAD ESTANDAR"
+        />
+
+    <TextView
+        android:id="@+id/textViewG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gravedad_estandar"
+        />
+
+    <ImageView
+        android:id="@+id/balon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/balon"
+        android:layout_marginTop="90dp"
+        android:layout_gravity="center"/>
+
+
+</LinearLayout>

@@ -3,7 +3,10 @@ package com.example.miapp.ui.main;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -172,6 +175,12 @@ public class Main extends AppCompatActivity {
             } else {
                 abrirInformacion("modificar");
             }
+        } else if (id == R.id.cerrar_sesion) {
+            SharedPreferences session = getSharedPreferences("UserSession", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = session.edit();
+            editor.clear();
+            editor.apply();
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }

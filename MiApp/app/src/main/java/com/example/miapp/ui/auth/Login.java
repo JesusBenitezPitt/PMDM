@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -26,8 +27,9 @@ public class Login extends AppCompatActivity {
 
     private EditText usuarioField, passwdField;
     private Button loginButton, registrarButton;
-    protected SharedPreferences prefs;
+    protected SharedPreferences prefs, session;
     private MediaPlayer mediaPlayer;
+    private CheckBox checkBox_sesion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +67,17 @@ public class Login extends AppCompatActivity {
         passwdField = findViewById(R.id.passwd);
         loginButton = findViewById(R.id.botonLogin);
         registrarButton = findViewById(R.id.botonRegistrar);
+        checkBox_sesion = findViewById(R.id.checkbox_sesion);
     }
 
     private void initPrefs() {
         prefs = getSharedPreferences("usuarios", Context.MODE_PRIVATE);
+        session = getSharedPreferences("UserSession", Context.MODE_PRIVATE);
+
+        if (session.getBoolean("isLoggedIn", false)) {
+            Intent mainIntent = new Intent(Login.this, Main.class);
+            mainIntent.putExtra("userId", session.getString("userId", null));
+        }
 
         if (!prefs.contains("inicializado")) {
             SharedPreferences.Editor editor = prefs.edit();
@@ -119,6 +128,12 @@ public class Login extends AppCompatActivity {
             if (u.getDatos().getPasswd().equals(Encriptacion.sha256(passwd))) {
                 Intent mainIntent = new Intent(Login.this, Main.class);
                 mainIntent.putExtra("userId", u.getDatos().getId());
+                if (checkBox_sesion.isChecked()) {
+                    SharedPreferences.Editor editor = session.edit();
+                    editor.putInt("userId", u.getDatos().getId());
+                    editor.putBoolean("isLoggedIn", true);
+                    editor.apply();
+                }
                 startActivity(mainIntent);
                 return true;
             }

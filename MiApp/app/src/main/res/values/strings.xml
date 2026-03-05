@@ -4,4 +4,5 @@
     <string name="insertar_registro">Insertar registro</string>
     <string name="passwd">Contraseña</string>
     <string name="user">Usuario</string>
+    <string name="cerrar_sesion">Cerrar Sesión</string>
 </resources>

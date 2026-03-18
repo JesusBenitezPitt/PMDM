@@ -26,14 +26,16 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.miapp.app.MiApp;
 import com.example.miapp.R;
 import com.example.miapp.data.repository.EmpresaRepository;
 import com.example.miapp.model.EmpresaEntity;
 import com.example.miapp.ui.adapter.Adaptador;
 import com.example.miapp.model.Empresa;
-import com.example.miapp.model.Empresa;
 import com.example.miapp.ui.add.Anadir_Nuevo;
+import com.example.miapp.ui.auth.Login;
 import com.example.miapp.ui.info.Informacion;
+import com.example.miapp.ui.privacy.Bloqueo;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -43,6 +45,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import com.example.miapp.ui.ajustes.Ajustes;
 
 public class Main extends AppCompatActivity {
 
@@ -177,10 +181,22 @@ public class Main extends AppCompatActivity {
             }
         } else if (id == R.id.cerrar_sesion) {
             SharedPreferences session = getSharedPreferences("UserSession", Context.MODE_PRIVATE);
+            boolean privacidadActiva = session.getBoolean("privacidad_" + userId, false);
+
             SharedPreferences.Editor editor = session.edit();
             editor.clear();
+
+            editor.putBoolean("privacidad_" + userId, privacidadActiva);
             editor.apply();
+
+            Intent intent = new Intent(Main.this, Login.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
             finish();
+        } else if (id == R.id.ajustes) {
+            Intent intent = new Intent(this, Ajustes.class);
+            intent.putExtra("userId", userId);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -297,6 +313,18 @@ public class Main extends AppCompatActivity {
             empresaRepo.actualizarEmpresas(empresaActualizada, rows -> runOnUiThread(() ->
                     Toast.makeText(this, "Registro actualizado", Toast.LENGTH_SHORT).show()
             ));
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences session = getSharedPreferences("UserSession", Context.MODE_PRIVATE);
+        boolean privacidadActiva = session.getBoolean("privacidad_" + userId, false);
+        if (privacidadActiva && MiApp.consumirSegundoPlano()) {
+            Intent intent = new Intent(Main.this, Bloqueo.class);
+            intent.putExtra("userId", userId);
+            startActivity(intent);
         }
     }
 }

@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.miapp.R;
 import com.example.miapp.model.Usuario;
 import com.example.miapp.ui.main.Main;
+import com.example.miapp.ui.privacy.Bloqueo;
 import com.example.miapp.utils.Encriptacion;
 
 import com.google.gson.Gson;
@@ -55,7 +56,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void stopMusic() {
-        if(mediaPlayer.isPlaying() || mediaPlayer != null){
+        if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
             mediaPlayer = null;
@@ -75,8 +76,19 @@ public class Login extends AppCompatActivity {
         session = getSharedPreferences("UserSession", Context.MODE_PRIVATE);
 
         if (session.getBoolean("isLoggedIn", false)) {
-            Intent mainIntent = new Intent(Login.this, Main.class);
-            mainIntent.putExtra("userId", session.getString("userId", null));
+            int userId = session.getInt("userId", -1);
+            boolean privacidadActiva = session.getBoolean("privacidad_" + userId, false);
+
+            if (privacidadActiva) {
+                Intent intent = new Intent(Login.this, Bloqueo.class);
+                intent.putExtra("userId", userId);
+                stopMusic();
+                startActivity(intent);
+                finish();
+            } else {
+                irAMain(userId);
+            }
+            return;
         }
 
         if (!prefs.contains("inicializado")) {
@@ -87,20 +99,15 @@ public class Login extends AppCompatActivity {
             Usuario u3 = new Usuario(Encriptacion.sha256("Jesus"), new Usuario.Datos(Encriptacion.sha256("1234"), 3));
 
             Gson gson = new Gson();
-            String u1_json = gson.toJson(u1);
-            String u2_json = gson.toJson(u2);
-            String u3_json = gson.toJson(u3);
-
-            editor.putString(Encriptacion.sha256("Usuario1"), u1_json);
-            editor.putString(Encriptacion.sha256("Usuario2"), u2_json);
-            editor.putString(Encriptacion.sha256("Jesus"), u3_json);
+            editor.putString(Encriptacion.sha256("Usuario1"), gson.toJson(u1));
+            editor.putString(Encriptacion.sha256("Usuario2"), gson.toJson(u2));
+            editor.putString(Encriptacion.sha256("Jesus"), gson.toJson(u3));
             editor.putBoolean("inicializado", true);
             editor.apply();
         }
     }
 
     private void initListeners() {
-
         loginButton.setOnClickListener(v -> {
             if (intentarLogin()) {
                 stopMusic();
@@ -120,29 +127,33 @@ public class Login extends AppCompatActivity {
         String passwd = passwdField.getText().toString();
 
         String valor = prefs.getString(Encriptacion.sha256(usuario), null);
-        Log.d("Prueba", " " + valor);
         if (valor != null) {
             Gson gson = new Gson();
             Usuario u = gson.fromJson(valor, Usuario.class);
-            Log.d("Prueba", u.getDatos().getPasswd() + "    /     " + passwd);
             if (u.getDatos().getPasswd().equals(Encriptacion.sha256(passwd))) {
-                Intent mainIntent = new Intent(Login.this, Main.class);
-                mainIntent.putExtra("userId", u.getDatos().getId());
                 if (checkBox_sesion.isChecked()) {
                     SharedPreferences.Editor editor = session.edit();
                     editor.putInt("userId", u.getDatos().getId());
                     editor.putBoolean("isLoggedIn", true);
                     editor.apply();
                 }
-                startActivity(mainIntent);
+                irAMain(u.getDatos().getId());
                 return true;
             }
         }
         return false;
     }
 
+    private void irAMain(int userId) {
+        stopMusic();
+        Intent mainIntent = new Intent(Login.this, Main.class);
+        mainIntent.putExtra("userId", userId);
+        startActivity(mainIntent);
+        finish();
+    }
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_REGISTRAR && resultCode == RESULT_OK) {
             Toast.makeText(this, "Usuario creado exitosamente.", Toast.LENGTH_SHORT).show();

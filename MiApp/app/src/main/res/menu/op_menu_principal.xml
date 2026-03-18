@@ -17,4 +17,9 @@
         android:title="@string/cerrar_sesion"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/ajustes"
+        android:title="Ajustes"
+        app:showAsAction="never"/>
+
 </menu>

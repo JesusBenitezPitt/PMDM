@@ -29,14 +29,23 @@ public class MiVista extends View {
 
         // Mover la bola
         y += velocidad;
+        x += velocidad;
 
         // Rebote arriba
         if (y - radio <= 0) {
             velocidad = Math.abs(velocidad);
         }
 
+        if (x - radio <= 0) {
+            velocidad = Math.abs(velocidad);
+        }
+
         // Rebote abajo
         if (y + radio >= getHeight()) {
+            velocidad = -Math.abs(velocidad);
+        }
+
+        if (x + radio >= getWidth()) {
             velocidad = -Math.abs(velocidad);
         }
 

@@ -6,16 +6,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
 public class MiVista extends SurfaceView implements Runnable {
 
     Thread gameThread;
     boolean running = false;
     SurfaceHolder holder;
-    float velocidad = 8f;
-    int x, y;
-    int radio = 80;
     Paint pincel;
 
     public MiVista(Context context) {
@@ -24,9 +20,6 @@ public class MiVista extends SurfaceView implements Runnable {
         holder = getHolder();
         pincel = new Paint();
         pincel.setColor(Color.RED);
-
-        x = 500;
-        y = radio;
     }
 
     @Override
@@ -61,29 +54,5 @@ public class MiVista extends SurfaceView implements Runnable {
             e.printStackTrace();
         }
     }
-
-//    @Override
-//    protected void onDraw(Canvas canvas) {
-//        super.onDraw(canvas);
-//
-//        // Mover la bola
-//        y += velocidad;
-//
-//        // Rebote arriba
-//        if (y - radio <= 0) {
-//            velocidad = Math.abs(velocidad);
-//        }
-//
-//        // Rebote abajo
-//        if (y + radio >= getHeight()) {
-//            velocidad = -Math.abs(velocidad);
-//        }
-//
-//        // Dibujar la bola
-//        canvas.drawCircle(x, y, radio, pincel);
-//
-//        // Animación infinita
-//        invalidate();
-//    }
 }
 

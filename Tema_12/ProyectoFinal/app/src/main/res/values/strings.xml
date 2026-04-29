@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Maze Runner</string>
+    <string name="btn_play">JUGAR</string>
+    <string name="btn_play_again">VOLVER A JUGAR</string>
+    <string name="btn_main_menu">MENÚ PRINCIPAL</string>
+    <string name="btn_resume">CONTINUAR</string>
+    <string name="btn_restart">REINICIAR</string>
+    <string name="btn_quit">SALIR</string>
+    <string name="label_score">PUNTUACIÓN</string>
+    <string name="label_best">MEJOR</string>
+    <string name="label_lives">VIDAS</string>
+    <string name="label_level">NIVEL</string>
+    <string name="title_game_over">FIN DE PARTIDA</string>
+    <string name="title_level_complete">¡NIVEL COMPLETADO!</string>
+    <string name="title_paused">PAUSA</string>
+    <string name="hint_controls">Usa los botones para moverte</string>
+    <string name="hint_collect">Recoge todas las monedas</string>
+    <string name="hint_avoid">Evita los enemigos</string>
+    <string name="powerup_speed">¡VELOCIDAD!</string>
+    <string name="powerup_shield">¡ESCUDO!</string>
+    <string name="powerup_slow">¡RALENTIZACIÓN!</string>
+    <string name="content_description_up">Arriba</string>
+    <string name="content_description_down">Abajo</string>
+    <string name="content_description_left">Izquierda</string>
+    <string name="content_description_right">Derecha</string>
+    <string name="content_description_pause">Pausa</string>
+</resources>

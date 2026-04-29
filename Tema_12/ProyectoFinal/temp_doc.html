@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"></head><body>
+
+<h1>Maze Runner &ndash; Documentaci&oacute;n de Entrega</h1>
+<p><strong>Alumno:</strong> Jes&uacute;s Ben&iacute;tez Pitt &nbsp;&nbsp;&nbsp; <strong>M&oacute;dulo:</strong> Programaci&oacute;n Multimedia y Dispositivos M&oacute;viles (PMDM) &ndash; 2&ordm; DAM</p>
+<p><strong>Entrega:</strong> 29 de Abril &nbsp;&nbsp;&nbsp; <strong>Presentaci&oacute;n:</strong> 30 de Abril</p>
+
+<hr>
+
+<h2>1. Descripci&oacute;n del juego</h2>
+
+<p>Maze Runner es un videojuego 2D para Android inspirado en el cl&aacute;sico Pac-Man. El jugador controla un personaje que recorre un laberinto generado de forma procedural mediante un algoritmo DFS, recogiendo monedas y power-ups mientras esquiva tres tipos de enemigos con comportamientos distintos. El objetivo es llegar a la salida con la mayor puntuaci&oacute;n posible sin perder todas las vidas.</p>
+
+<p><em>[Indicar captura de pantalla de "Pantalla de inicio"]</em></p>
+
+<h3>Elementos del laberinto</h3>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%">
+<tr style="background-color:#1f3864;color:white"><th>Elemento</th><th>Descripci&oacute;n</th><th>Efecto</th></tr>
+<tr><td>Monedas</td><td>Distribuidas por todos los caminos</td><td>+10 puntos</td></tr>
+<tr style="background-color:#e8edf5"><td>Turbo (estrella amarilla)</td><td>Power-up amarillo</td><td>Duplica la velocidad del jugador durante 5 s</td></tr>
+<tr><td>Escudo (S azul)</td><td>Power-up azul</td><td>Absorbe un golpe de enemigo</td></tr>
+<tr style="background-color:#e8edf5"><td>Lento (reloj morado)</td><td>Power-up morado</td><td>Reduce la velocidad de los enemigos al 40 % durante 5 s</td></tr>
+<tr><td>Trampa (X roja)</td><td>Celda oculta en el camino</td><td>&minus;10 puntos al pisarla</td></tr>
+<tr style="background-color:#e8edf5"><td>Salida (celda verde)</td><td>Esquina inferior derecha del laberinto</td><td>Completa el nivel (+100 &times; n&uacute;mero de nivel)</td></tr>
+</table>
+
+<h3>Tipos de enemigos</h3>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%">
+<tr style="background-color:#1f3864;color:white"><th>Tipo</th><th>Color</th><th>Comportamiento (IA)</th></tr>
+<tr><td>Perseguidor</td><td>Rojo</td><td>Calcula la ruta m&aacute;s corta al jugador usando BFS (b&uacute;squeda en anchura)</td></tr>
+<tr style="background-color:#e8edf5"><td>Patrullero</td><td>Morado</td><td>Sigue rutas fijas por el laberinto con preferencia de direcci&oacute;n constante</td></tr>
+<tr><td>Aleatorio</td><td>Naranja</td><td>Elige una direcci&oacute;n aleatoria en cada celda</td></tr>
+</table>
+
+<p>Al colisionar con un enemigo el jugador pierde una vida y reaparece en la posici&oacute;n inicial con 3 segundos de invulnerabilidad representada con un aura verde pulsante. Si los enemigos est&aacute;n en modo huida, el perseguidor parpadea en azul. Con las 3 vidas perdidas la partida termina.</p>
+
+<h3>Sistema de puntuaci&oacute;n</h3>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:60%">
+<tr style="background-color:#1f3864;color:white"><th>Evento</th><th>Puntos</th></tr>
+<tr><td>Recoger moneda</td><td>+10</td></tr>
+<tr style="background-color:#e8edf5"><td>Recoger power-up</td><td>+50</td></tr>
+<tr><td>Completar nivel</td><td>+100 &times; n&uacute;mero de nivel</td></tr>
+<tr style="background-color:#e8edf5"><td>Activar trampa</td><td>&minus;10</td></tr>
+</table>
+
+<p>El marcador es visible en todo momento en la parte superior de la pantalla. El r&eacute;cord se guarda entre partidas con <code>SharedPreferences</code> y se muestra en la pantalla de inicio.</p>
+
+<h3>Sonido</h3>
+<p>El juego incluye m&uacute;sica de fondo y efectos de sonido para recoger monedas, activar power-ups, colisionar con enemigos y completar o fallar un nivel.</p>
+
+<hr>
+
+<h2>2. Manual de uso</h2>
+
+<h3>Pantallas de la aplicaci&oacute;n</h3>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%">
+<tr style="background-color:#1f3864;color:white"><th>Pantalla</th><th>Descripci&oacute;n</th></tr>
+<tr><td><strong>Inicio (MainActivity)</strong></td><td>Muestra el nombre del juego, el r&eacute;cord guardado y el bot&oacute;n Jugar. Incluye una leyenda con los tres tipos de enemigos.</td></tr>
+<tr style="background-color:#e8edf5"><td><strong>Juego (GameActivity)</strong></td><td>Laberinto interactivo. En la mitad superior est&aacute; el tablero con el HUD; en la mitad inferior, el D-pad t&aacute;ctil.</td></tr>
+<tr><td><strong>Game Over (GameOverActivity)</strong></td><td>Aparece al perder todas las vidas o al completar el nivel. Muestra la puntuaci&oacute;n final y el bot&oacute;n para reintentar.</td></tr>
+</table>
+
+<p><em>[Indicar captura de pantalla de "Pantalla de inicio (MainActivity)"]</em></p>
+<p><em>[Indicar captura de pantalla de "Pantalla de juego con HUD y D-pad"]</em></p>
+<p><em>[Indicar captura de pantalla de "Pantalla de Game Over"]</em></p>
+
+<h3>Controles</h3>
+<p>El juego se maneja con un D-pad t&aacute;ctil en la mitad inferior de la pantalla:</p>
+<ul>
+<li><strong>Bot&oacute;n &#9650;</strong> &ndash; Mover el personaje hacia arriba</li>
+<li><strong>Bot&oacute;n &#9660;</strong> &ndash; Mover el personaje hacia abajo</li>
+<li><strong>Bot&oacute;n &#9664;</strong> &ndash; Mover el personaje hacia la izquierda</li>
+<li><strong>Bot&oacute;n &#9654;</strong> &ndash; Mover el personaje hacia la derecha</li>
+</ul>
+<p>Los botones funcionan como <em>buffer de direcci&oacute;n</em>: la direcci&oacute;n pulsada se aplica en cuanto el personaje termina el movimiento actual, lo que permite anticipar los giros sin que el personaje se detenga.</p>
+
+<h3>C&oacute;mo jugar</h3>
+<ol>
+<li>Pulsar <strong>Jugar</strong> en la pantalla de inicio.</li>
+<li>Usar el D-pad para mover al personaje por los pasillos del laberinto.</li>
+<li>Recoger la mayor cantidad posible de monedas y power-ups.</li>
+<li>Evitar el contacto con los enemigos. Tener el escudo activo absorbe un golpe sin perder vida.</li>
+<li>Llegar a la celda verde (salida) para completar el nivel y pasar al siguiente.</li>
+<li>La dificultad aumenta con cada nivel: los enemigos son progresivamente m&aacute;s r&aacute;pidos.</li>
+</ol>
+
+<p><em>[Indicar captura de pantalla de "Partida en curso mostrando power-ups y enemigos"]</em></p>
+
+<hr>
+
+<h2>3. Desaf&iacute;o t&eacute;cnico: sistema de sprites animados</h2>
+
+<p>El mayor reto del proyecto fue conseguir que los sprites del personaje y los enemigos se renderizaran correctamente desde un sprite sheet compartido. El proceso pas&oacute; por tres errores encadenados que hubo que diagnosticar y resolver uno a uno.</p>
+
+<h3>&iquest;Qu&eacute; es un sprite sheet y c&oacute;mo funciona en el juego?</h3>
+<p>Un sprite sheet es una &uacute;nica imagen que contiene todos los frames de animaci&oacute;n organizados en una cuadr&iacute;cula. En lugar de cargar un bitmap por frame, se carga una sola imagen (<code>walk_sheet.png</code>) y en cada dibujado se recorta el rect&aacute;ngulo exacto correspondiente al frame y direcci&oacute;n actuales. El jugador y los tres enemigos comparten el mismo sheet; la diferencia visual entre ellos se consigue aplicando un filtro de color (<code>PorterDuff.Mode.SRC_ATOP</code>) sobre el sprite base.</p>
+
+<p>Dimensiones reales del sprite sheet:</p>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:55%">
+<tr style="background-color:#1f3864;color:white"><th>Propiedad</th><th>Valor</th></tr>
+<tr><td>Dimensiones de la imagen</td><td>192 &times; 128 px</td></tr>
+<tr style="background-color:#e8edf5"><td>Columnas (frames de animaci&oacute;n)</td><td>8</td></tr>
+<tr><td>Filas (direcciones de movimiento)</td><td>4</td></tr>
+<tr style="background-color:#e8edf5"><td>Tama&ntilde;o de cada frame</td><td>24 &times; 32 px</td></tr>
+<tr><td>FPS de la animaci&oacute;n</td><td>8 fps</td></tr>
+</table>
+
+<p><em>[Indicar captura de pantalla de "Sprite sheet walk_sheet.png"]</em></p>
+
+<h3>Problema 1 &ndash; Constantes de cuadr&iacute;cula incorrectas (sprite con sangrado lateral)</h3>
+
+<p>Las constantes estaban declaradas como <code>WALK_COLS = 6</code> y <code>WALK_ROWS = 4</code>. Con 6 columnas el c&oacute;digo calculaba un ancho de frame de 192 &divide; 6 = <strong>32 px</strong>, cuando el frame real mide <strong>24 px</strong>. Esto hac&iacute;a que cada rect&aacute;ngulo de recorte capturase 1,33 frames del sheet, mostrando el sprite actual m&aacute;s una franja del siguiente. El efecto visual era que la animaci&oacute;n &ldquo;se desplazaba hacia la izquierda&rdquo; al avanzar de frame.</p>
+
+<p><strong>Diagn&oacute;stico:</strong> medir la imagen con la API de Windows (System.Drawing) confirm&oacute; 192 &times; 128 px. La divisi&oacute;n 192 &divide; 6 = 32 no daba un n&uacute;mero redondo de frames, pero 192 &divide; 8 = 24 s&iacute;. La imagen ten&iacute;a 8 columnas, no 6.</p>
+
+<p><strong>Soluci&oacute;n:</strong></p>
+<pre style="background:#f4f4f4;padding:12px;font-family:'Courier New',monospace;font-size:13px">
+// Player.java y Enemy.java &mdash; antes (incorrecto)
+private static final int WALK_COLS = 6;  // frameW = 32 px (captura 1,33 sprites)
+private static final int WALK_ROWS = 4;
+
+// Player.java y Enemy.java &mdash; despu&eacute;s (correcto)
+private static final int WALK_COLS        = 8;   // frameW = 24 px exacto
+private static final int WALK_ROWS        = 4;   // frameH = 32 px exacto
+private static final int WALK_ANIM_FRAMES = 8;   // ciclo completo de 8 frames
+
+// Recorte del frame correcto en draw()
+int frameW = walkSheet.getWidth()  / WALK_COLS;  // 192 / 8 = 24 px
+int frameH = walkSheet.getHeight() / WALK_ROWS;  // 128 / 4 = 32 px
+int srcX   = frameAnim * frameW;
+int srcY   = row       * frameH;
+Rect src = new Rect(srcX, srcY, srcX + frameW, srcY + frameH);
+</pre>
+
+<h3>Problema 2 &ndash; Texture bleeding por filtrado bilineal</h3>
+
+<p>Aunque el tama&ntilde;o de frame fuera correcto, al escalar el sprite al tama&ntilde;o de celda del laberinto Android aplicaba interpolaci&oacute;n bilineal (activada por el flag <code>FILTER_BITMAP_FLAG</code> del <code>Paint</code>). Esa interpolaci&oacute;n mezcla los p&iacute;xeles del borde del recorte con los del frame adyacente en el sheet, produciendo un &ldquo;fantasma&rdquo; semitransparente en el borde del sprite. Este efecto se llama <em>texture bleeding</em>.</p>
+
+<p><strong>Soluci&oacute;n:</strong> eliminar el flag para forzar interpolaci&oacute;n nearest-neighbor, que es la adecuada para sprites pixel-art:</p>
+<pre style="background:#f4f4f4;padding:12px;font-family:'Courier New',monospace;font-size:13px">
+// Antes (causaba bleeding)
+private static final Paint PINCEL = new Paint(
+    Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+
+// Despu&eacute;s (nearest-neighbor, sin sangrado entre frames)
+private static final Paint PINCEL = new Paint(Paint.ANTI_ALIAS_FLAG);
+</pre>
+
+<h3>Problema 3 &ndash; Mapping de direcci&oacute;n a fila del sheet incorrecto</h3>
+
+<p>El switch que traduc&iacute;a la direcci&oacute;n de movimiento a la fila del sprite sheet ten&iacute;a el orden equivocado respecto al orden real del archivo: pulsar izquierda mostraba el sprite mirando arriba, pulsar arriba mostraba el sprite mirando a la derecha, etc.</p>
+
+<p><strong>Soluci&oacute;n:</strong> verificar visualmente el orden de filas del sheet e invertir el mapping:</p>
+<pre style="background:#f4f4f4;padding:12px;font-family:'Courier New',monospace;font-size:13px">
+// Antes (mapping equivocado)
+switch (dirActual) {
+    case DIR_ABAJO:     row = 0; break;
+    case DIR_IZQUIERDA: row = 1; break;  // Fila 1 es Arriba, no Izquierda
+    case DIR_ARRIBA:    row = 3; break;  // Fila 3 es Derecha, no Arriba
+    default:            row = 2; break;  // Fila 2 es Izquierda, no Derecha
+}
+
+// Despu&eacute;s (mapping correcto)
+switch (dirActual) {
+    case DIR_ABAJO:     row = 0; break;
+    case DIR_ARRIBA:    row = 1; break;
+    case DIR_IZQUIERDA: row = 2; break;
+    default:            row = 3; break;  // DIR_DERECHA
+}
+</pre>
+
+<h3>Lecci&oacute;n aprendida</h3>
+<p>Antes de escribir ninguna constante de sprite sheet hay que medir la imagen real: <strong>ancho &divide; columnas</strong> y <strong>alto &divide; filas</strong> deben dar n&uacute;meros enteros exactos. Si no cuadran, las constantes est&aacute;n mal. Para sprites pixel-art hay que desactivar siempre el filtrado bilineal de Android (<code>FILTER_BITMAP_FLAG</code>) para evitar el sangrado entre frames. Y el orden de filas del sheet hay que verificarlo abriendo la imagen, no asumirlo por el nombre de las variables.</p>
+
+<p><em>[Indicar captura de pantalla de "Sprites renderizados correctamente en el juego"]</em></p>
+
+</body></html>
